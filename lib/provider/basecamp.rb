@@ -8,7 +8,19 @@ module TicketMaster::Provider
       TicketMaster.new(:basecamp, auth)
     end
     
-    # declare needed overloaded methods here
+    def authorize(auth = {})
+      auth[:ssl] ||= false
+      @authentication ||= TicketMaster::Authenticator.new(auth)
+      auth = @authentication
+      if auth.domain.nil? or (auth.token.nil? and (auth.username.nil? and auth.password.nil?))
+        raise "Please provide at least an domain and token or username and password)"
+      end
+      unless auth.token.nil?
+        auth.username = auth.token
+        auth.password = 'Basecamp lamo'
+      end
+      Kernel::Basecamp.establish_connection!(auth.domain, auth.username, auth.password, auth.ssl)
+    end
     
   end
 end

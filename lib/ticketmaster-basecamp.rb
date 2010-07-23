@@ -1,4 +1,4 @@
-#require YOUR_PROVIDER_API
+require File.dirname(__FILE__) + '/basecamp/basecamp.rb'
 
 %w{ basecamp ticket project comment }.each do |f|
   require File.dirname(__FILE__) + '/provider/' + f + '.rb';
