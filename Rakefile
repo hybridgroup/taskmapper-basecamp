@@ -6,7 +6,7 @@ begin
   Jeweler::Tasks.new do |gem|
     gem.name = "ticketmaster-basecamp"
     gem.summary = %Q{The basecamp provider for ticketmaster}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.description = %Q{This gem provides an interface to basecamp through the ticketmaster gem}
     gem.email = "hong.quach@abigfisch.com"
     gem.homepage = "http://github.com/kiafaldorius/ticketmaster-basecamp"
     gem.authors = ["HybridGroup"]
