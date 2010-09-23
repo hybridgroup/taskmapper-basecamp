@@ -147,7 +147,7 @@ end
 #   person = session.person(93832) # => #<Record(person)..>
 #   person.first_name # => "Jason"
 #
-class Basecamp
+class BasecampAPI
   class Connection #:nodoc:
     def initialize(master)
       @master = master

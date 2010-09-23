@@ -7,7 +7,7 @@ module TicketMaster::Provider
     #
     class Comment < TicketMaster::Provider::Base::Comment
       # declare needed overloaded methods here
-      API = Kernel::Basecamp::Comment
+      API = BasecampAPI::Comment
       
       def self.find_by_id(project_id, ticket_id, id)
         self.new self::API.find(id)

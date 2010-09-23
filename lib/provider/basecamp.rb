@@ -17,9 +17,9 @@ module TicketMaster::Provider
       end
       unless auth.token.nil?
         auth.username = auth.token
-        auth.password = 'Basecamp lamo'
+        auth.password = 'Basecamp'
       end
-      Kernel::Basecamp.establish_connection!(auth.domain, auth.username, auth.password, auth.ssl)
+      BasecampAPI.establish_connection!(auth.domain, auth.username, auth.password, auth.ssl)
     end
     
   end

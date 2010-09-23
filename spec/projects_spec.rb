@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe "Ticketmaster::Provider::Basecamp::Project" do
   before(:all) do
-    headers = {'Authorization' => 'Basic MDAwMDAwOkJhc2VjYW1wIGxhbW8='}
+    headers = {'Authorization' => 'Basic MDAwMDAwOkJhc2VjYW1w'}
     wheaders = headers.merge('Content-Type' => 'application/xml')
     @project_id = 5220065
     ActiveResource::HttpMock.respond_to do |mock|

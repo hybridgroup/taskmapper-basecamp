@@ -8,7 +8,7 @@ module TicketMaster::Provider
     # created_at => created_on
     # updated_at => last_changed_on
     class Project < TicketMaster::Provider::Base::Project
-      API = Kernel::Basecamp::Project
+      API = BasecampAPI::Project
       
       def description
         announcement
