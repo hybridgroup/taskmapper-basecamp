@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{ticketmaster-basecamp}
-  s.version = "0.1.0"
+  s.version = "0.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["HybridGroup"]
-  s.date = %q{2010-08-02}
+  s.date = %q{2010-09-23}
   s.description = %q{This gem provides an interface to basecamp through the ticketmaster gem}
   s.email = %q{hong.quach@abigfisch.com}
   s.extra_rdoc_files = [
