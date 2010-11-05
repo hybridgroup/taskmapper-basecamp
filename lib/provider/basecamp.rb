@@ -12,7 +12,7 @@ module TicketMaster::Provider
       auth[:ssl] ||= false
       @authentication ||= TicketMaster::Authenticator.new(auth)
       auth = @authentication
-      if (auth.domain.nil? and auth.subdomain.nil) or (auth.token.nil? and (auth.username.nil? and auth.password.nil?))
+      if (auth.domain.nil? and auth.subdomain.nil?) or (auth.token.nil? and (auth.username.nil? and auth.password.nil?))
         raise "Please provide at least an domain and token or username and password)"
       end
       unless auth.token.nil?
