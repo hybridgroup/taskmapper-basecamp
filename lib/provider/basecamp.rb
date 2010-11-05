@@ -12,12 +12,15 @@ module TicketMaster::Provider
       auth[:ssl] ||= false
       @authentication ||= TicketMaster::Authenticator.new(auth)
       auth = @authentication
-      if auth.domain.nil? or (auth.token.nil? and (auth.username.nil? and auth.password.nil?))
+      if (auth.domain.nil? and auth.subdomain.nil) or (auth.token.nil? and (auth.username.nil? and auth.password.nil?))
         raise "Please provide at least an domain and token or username and password)"
       end
       unless auth.token.nil?
         auth.username = auth.token
         auth.password = 'Basecamp'
+      end
+      if auth.domain.nil? and auth.subdomain
+        auth.domain = (auth.subdomain.include?('.') ? auth.subdomain : auth.subdomain + '.basecamphq.com')
       end
       BasecampAPI.establish_connection!(auth.domain, auth.username, auth.password, auth.ssl)
     end
