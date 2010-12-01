@@ -19,7 +19,11 @@ module TicketMaster::Provider
       end
       
       def created_at
-        created_on
+        begin
+          created_on.to_time
+        rescue
+          created_on
+        end
       end
       
       def created_at=(created)
@@ -27,7 +31,11 @@ module TicketMaster::Provider
       end
       
       def updated_at
-        last_changed_on
+        begin
+          last_changed_on.to_time
+        rescue
+          last_changed_on
+        end
       end
       
       def updated_at=(updated)

@@ -82,7 +82,11 @@ module TicketMaster::Provider
       end
       
       def updated_at
-        self.completed_on
+        begin
+          self.completed_on.to_time
+        rescue
+          self.completed_on
+        end
       end
       
       def updated_at=(comp)
