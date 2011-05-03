@@ -9,7 +9,7 @@ module TicketMaster::Provider
     end
     
     def authorize(auth = {})
-      auth[:ssl] ||= false
+      auth[:ssl] = true
       @authentication ||= TicketMaster::Authenticator.new(auth)
       auth = @authentication
       if (auth.domain.nil? and auth.subdomain.nil?) or (auth.token.nil? and (auth.username.nil? and auth.password.nil?))
