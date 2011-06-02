@@ -24,6 +24,10 @@ module TicketMaster::Provider
       end
       BasecampAPI.establish_connection!(auth.domain, auth.username, auth.password, auth.ssl)
     end
+
+    def valid?
+      BasecampAPI.connection ? true : false
+    end
     
   end
 end
