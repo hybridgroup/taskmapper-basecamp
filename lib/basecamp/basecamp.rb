@@ -196,16 +196,6 @@ class BasecampAPI
   end
 
   class Account < Resource
-    def element_path(id, prefix_options = {}, query_options = nil)
-      prefix_options, query_options = split_options(prefix_options) if query_options.nil?
-      "#{prefix(prefix_options)}account.#{format.extension}"
-    end
-
-    def collection_path(prefix_options = {}, query_options = nil)
-      prefix_options, query_options = split_options(prefix_options) if query_options.nil?
-      "#{prefix(prefix_options)}account.#{format.extension}"
-    end
-
   end
 
   class Project < Resource

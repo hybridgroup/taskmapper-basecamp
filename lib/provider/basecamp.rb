@@ -26,7 +26,12 @@ module TicketMaster::Provider
     end
 
     def valid?
-      BasecampAPI::Account.find(:all)
+      begin
+        project_count = BasecampAPI::Project.find(:count)
+        project_count.active >= 0 || project_count.archived >= 0 || project_count.on_hold >= 0
+      rescue
+        false
+      end
     end
 
   end
