@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{ticketmaster-basecamp}
-  s.version = "0.2.5"
+  s.version = "0.2.6"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["HybridGroup"]
@@ -32,6 +32,7 @@ Gem::Specification.new do |s|
     "spec/fixtures/comments.xml",
     "spec/fixtures/comments/74197051.xml",
     "spec/fixtures/comments/74197096.xml",
+    "spec/fixtures/project_count.xml",
     "spec/fixtures/projects.xml",
     "spec/fixtures/projects/5220065.xml",
     "spec/fixtures/projects/create.xml",
@@ -47,7 +48,7 @@ Gem::Specification.new do |s|
   ]
   s.homepage = %q{http://github.com/kiafaldorius/ticketmaster-basecamp}
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.6.0}
+  s.rubygems_version = %q{1.6.1}
   s.summary = %q{The basecamp provider for ticketmaster}
 
   if s.respond_to? :specification_version then
