@@ -2,6 +2,10 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe "TicketmasterBasecamp" do
   before(:each) do 
+    headers = {'Authorization' => 'Basic MDAwMDAwOkJhc2VjYW1w'}
+    ActiveResource::HttpMock.respond_to do |mock|
+      mock.get '/accounts.xml', headers, fixture_for('projects'), 200
+    end
     @ticketmaster = TicketMaster.new(:basecamp, {:domain => 'ticketmaster.basecamphq.com', :token => '000000'})
   end
 

@@ -26,9 +26,9 @@ module TicketMaster::Provider
     end
 
     def valid?
-      BasecampAPI.connection ? true : false
+      BasecampAPI::Account.find(:all)
     end
-    
+
   end
 end
 
