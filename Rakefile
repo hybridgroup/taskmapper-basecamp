@@ -10,7 +10,7 @@ begin
     gem.email = "hong.quach@abigfisch.com"
     gem.homepage = "http://github.com/kiafaldorius/ticketmaster-basecamp"
     gem.authors = ["HybridGroup"]
-    gem.add_dependency "ticketmaster", ">= 0.4.0"
+    gem.add_dependency "ticketmaster", ">= 0.6.6"
     gem.add_development_dependency "rspec", ">= 1.2.9"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
