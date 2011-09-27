@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{ticketmaster-basecamp}
-  s.version = "0.2.7"
+  s.version = "0.2.8"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["HybridGroup"]
-  s.date = %q{2011-07-11}
+  s.date = %q{2011-09-27}
   s.description = %q{This gem provides an interface to basecamp through the ticketmaster gem}
   s.email = %q{hong.quach@abigfisch.com}
   s.extra_rdoc_files = [
@@ -50,13 +50,6 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}
   s.summary = %q{The basecamp provider for ticketmaster}
-  s.test_files = [
-    "spec/comments_spec.rb",
-    "spec/projects_spec.rb",
-    "spec/spec_helper.rb",
-    "spec/ticketmaster-basecamp_spec.rb",
-    "spec/tickets_spec.rb"
-  ]
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
