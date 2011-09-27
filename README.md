@@ -41,6 +41,10 @@ Since basecamp does not have the conventional "tickets", ticketmaster-basecamp c
 
 For more usage information, see (ticketmaster)[http://github.com/hybridgroup/ticketmaster]. This provider should implement all the ticketmaster functionality. If it does not, please notify us.
 
+## Constributions
+
+* Kir Shatrov[https://github.com/kirs]
+
 Thanks for using ticketmaster!
 
 == Note on Patches/Pull Requests
