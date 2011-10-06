@@ -334,6 +334,14 @@ class BasecampAPI
       put(:uncomplete)
     end
   end
+  
+  class Person < Resource
+    parent_resources :project
+    
+    def self.all(project_id)
+      find(:all, :params=>{:project_id => project_id})
+    end
+  end
 
   class TimeEntry < Resource
     parent_resources :project, :todo_item
