@@ -110,10 +110,14 @@ module TicketMaster::Provider
       end
       
       def comment!(*options)
-        options[0].merge!(:todo_item_id => id) if options.first.is_a?(Hash)
+        options[0].merge!(:post_id => id) if options.first.is_a?(Hash)
         self.class.parent::Comment.create(*options)
       end
-      
+
+      def comments(*options)
+        Comment.find(self.project_id, self.ticket_id, options)
+      end
+
     end
   end
 end
