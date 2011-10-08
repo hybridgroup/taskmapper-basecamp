@@ -1,4 +1,5 @@
-require File.dirname(__FILE__) + '/basecamp/basecamp.rb'
+require 'rubygems'
+require 'basecamp'
 
 %w{ basecamp ticket project comment }.each do |f|
   require File.dirname(__FILE__) + '/provider/' + f + '.rb';
