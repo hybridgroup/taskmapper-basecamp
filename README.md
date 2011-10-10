@@ -19,6 +19,7 @@ At the bottom of that page is the "Authentication tokens" section. Click on the 
 # Usage
 
 Initialize the basecamp ticketmaster instance using a token or username and password:
+
     basecamp = TicketMaster.new(:basecamp, :domain => 'yourdomain.basecamphq.com', :token => 'abc000...')
     basecamp = TicketMaster.new(:basecamp, :domain => 'yourdomain.basecamphq.com', :username => 'you', :password => 'pass')
 
