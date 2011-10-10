@@ -1,6 +1,6 @@
 # ticketmaster-basecamp
 
-This is the provider for interaction with (basecamp)[http://www.basecamphq.com] using (ticketmaster)[http://ticketrb.com]
+This is the provider for interaction with [basecamp](http://www.basecamphq.com) using [ticketmaster](http://ticketrb.com)
 
 # Basecamp Setup
 
@@ -19,6 +19,7 @@ At the bottom of that page is the "Authentication tokens" section. Click on the 
 # Usage
 
 Initialize the basecamp ticketmaster instance using a token or username and password:
+
     basecamp = TicketMaster.new(:basecamp, :domain => 'yourdomain.basecamphq.com', :token => 'abc000...')
     basecamp = TicketMaster.new(:basecamp, :domain => 'yourdomain.basecamphq.com', :username => 'you', :password => 'pass')
 
@@ -39,15 +40,15 @@ Since basecamp does not have the conventional "tickets", ticketmaster-basecamp c
 
 ## More
 
-For more usage information, see (ticketmaster)[http://github.com/hybridgroup/ticketmaster]. This provider should implement all the ticketmaster functionality. If it does not, please notify us.
+For more usage information, see [ticketmaster](http://github.com/hybridgroup/ticketmaster). This provider should implement all the ticketmaster functionality. If it does not, please notify us.
 
-## Constributions
+## Contributions
 
-* Kir Shatrov[https://github.com/kirs]
+* [Kir Shatrov](https://github.com/kirs) ([Evrone company](https://github.com/organizations/evrone))
 
 Thanks for using ticketmaster!
 
-== Note on Patches/Pull Requests
+### Note on Patches/Pull Requests
  
 * Fork the project.
 * Make your feature addition or bug fix.
@@ -57,6 +58,6 @@ Thanks for using ticketmaster!
   (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
 
-== Copyright
+## Copyright
 
 Copyright (c) 2010 HybridGroup. See LICENSE for details.
