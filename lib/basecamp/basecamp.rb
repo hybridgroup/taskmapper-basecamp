@@ -287,7 +287,7 @@ class BasecampAPI
   #   c.save # => true
   #
   class Comment < Resource
-    self.site += '/:post_id/'
+    parent_resources :post, :milestone, :todo_item
   end
 
   class TodoList < Resource
