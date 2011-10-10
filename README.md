@@ -1,6 +1,6 @@
 # ticketmaster-basecamp
 
-This is the provider for interaction with [basecamp[(http://www.basecamphq.com) using [ticketmaster](http://ticketrb.com)
+This is the provider for interaction with [basecamp](http://www.basecamphq.com) using [ticketmaster](http://ticketrb.com)
 
 # Basecamp Setup
 
