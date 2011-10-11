@@ -13,23 +13,21 @@ describe "Ticketmaster::Provider::Basecamp::Comment" do
       mock.get '/comments/74197096.json', headers, fixture_for('comments/74197096'), 200
       mock.post '/todo_items/62509330/comments.json', headers, '', 201
     end
-    @project_id = 5220065
-    @ticket_id = 62509330
-  end
-  
-  before(:each) do
     @ticketmaster = TicketMaster.new(:basecamp, :domain => 'ticketmaster.basecamphq.com', :token => '000000')
     @project = @ticketmaster.project(@project_id)
     @ticket = @project.ticket(@ticket_id)
     @klass = TicketMaster::Provider::Basecamp::Comment
+
+    @project_id = 5220065
+    @ticket_id = 62509330
   end
-  
+
   it "should be able to load all comments" do
     @comments = @ticket.comments
     @comments.should be_an_instance_of(Array)
     @comments.first.should be_an_instance_of(@klass)
   end
-  
+
   it "should be able to load all comments based on 'id's" do # lighthouse comments don't have ids, so we're faking them
     @comments = @ticket.comments([74197051, 74197096])
     @comments.should be_an_instance_of(Array)
@@ -37,28 +35,28 @@ describe "Ticketmaster::Provider::Basecamp::Comment" do
     @comments.last.id.should == 74197096
     @comments[1].should be_an_instance_of(@klass)
   end
-  
+
   it "should be able to load all comments based on attributes" do
     @comments = @ticket.comments(:commentable_id => @ticket.id)
     @comments.should be_an_instance_of(Array)
     @comments.first.should be_an_instance_of(@klass)
   end
-  
+
   it "should be able to load a comment based on id" do
     @comment = @ticket.comment(74197051)
     @comment.should be_an_instance_of(@klass)
     @comment.id.should == 74197051
   end
-  
+
   it "should be able to load a comment based on attributes" do
     @comment = @ticket.comment(:commentable_id => @ticket.id)
     @comment.should be_an_instance_of(@klass)
   end
-  
+
   it "should return the class" do
     @ticket.comment.should == @klass
   end
-  
+
   it "should be able to create a comment" do # which as mentioned before is technically a ticket update
     @comment = @ticket.comment!(:body => 'hello there boys and girls')
     @comment.should be_an_instance_of(@klass)
