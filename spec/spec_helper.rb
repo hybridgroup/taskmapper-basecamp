@@ -12,5 +12,5 @@ Spec::Runner.configure do |config|
 end
 
 def fixture_for(name)
-  File.read(File.dirname(__FILE__) + '/fixtures/' + name + '.xml')
+  File.read(File.dirname(__FILE__) + '/fixtures/' + name + '.json')
 end

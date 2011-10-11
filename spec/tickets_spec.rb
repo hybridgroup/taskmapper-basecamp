@@ -3,14 +3,14 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 describe "Ticketmaster::Provider::Basecamp::Ticket" do
   before(:all) do
     headers = {'Authorization' => 'Basic MDAwMDAwOkJhc2VjYW1w'}
-    wheaders = headers.merge('Content-Type' => 'application/xml')
+    wheaders = headers.merge('Content-Type' => 'application/json')
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get '/projects/5220065.xml', headers, fixture_for('projects/5220065'), 200
-      mock.get '/projects/5220065/todo_lists.xml', headers, fixture_for('todo_lists'), 200
-      mock.get '/todo_lists/9973518/todo_items.xml', headers, fixture_for('todo_lists/9973518_items'), 200
-      mock.get '/todo_lists/9972756/todo_items.xml', headers, fixture_for('todo_lists/9972756_items'), 200
-      mock.put '/todo_items/62509330.xml', wheaders, '', 200
-      mock.post '/todo_lists/9972756/todo_items.xml', wheaders, '', 200
+      mock.get '/projects/5220065.json', headers, fixture_for('projects/5220065'), 200
+      mock.get '/projects/5220065/todo_lists.json', headers, fixture_for('todo_lists'), 200
+      mock.get '/todo_lists/9973518/todo_items.json', headers, fixture_for('todo_lists/9973518_items'), 200
+      mock.get '/todo_lists/9972756/todo_items.json', headers, fixture_for('todo_lists/9972756_items'), 200
+      mock.put '/todo_items/62509330.json', wheaders, '', 200
+      mock.post '/todo_lists/9972756/todo_items.json', wheaders, '', 200
     end
     @project_id = 5220065
     @ticket_id = 62509330
