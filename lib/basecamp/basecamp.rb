@@ -164,7 +164,7 @@ class BasecampAPI
   end
 
   class Resource < ActiveResource::Base #:nodoc:
-    self.format = ActiveResource::Formats::XmlFormat # for 3.1 capability
+    #self.format = ActiveResource::Formats::JSONFormat # for 6.1 capability
     
     class << self
       def parent_resources(*parents)
@@ -287,7 +287,7 @@ class BasecampAPI
   #   c.save # => true
   #
   class Comment < Resource
-    self.site += '/:post_id/'
+    parent_resources :post, :milestone, :todo_item
   end
 
   class TodoList < Resource

@@ -22,18 +22,18 @@ module TicketMaster::Provider
       if auth.domain.nil? and auth.subdomain
         auth.domain = (auth.subdomain.include?('.') ? auth.subdomain : auth.subdomain + '.basecamphq.com')
       end
-      ::Basecamp.establish_connection!(auth.domain, auth.username, auth.password, auth.ssl)
+      BasecampAPI.establish_connection!(auth.domain, auth.username, auth.password, auth.ssl)
     end
 
     def valid?
       begin
-        project_count = ::Basecamp::Project.find(:count)
+        project_count = BasecampAPI::Project.find(:count)
         project_count.active >= 0 || project_count.archived >= 0 || project_count.on_hold >= 0
       rescue
         false
       end
     end
-
+    
   end
 end
 
