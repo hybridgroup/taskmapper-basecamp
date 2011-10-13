@@ -3,15 +3,15 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 describe "Ticketmaster::Provider::Basecamp::Project" do
   before(:all) do
     headers = {'Authorization' => 'Basic MDAwMDAwOkJhc2VjYW1w'}
-    wheaders = headers.merge('Content-Type' => 'application/xml')
+    wheaders = headers.merge('Content-Type' => 'application/json')
     @project_id = 5220065
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get '/projects.xml', headers, fixture_for('projects'), 200
-      mock.get '/projects/5220065.xml', headers, fixture_for('projects/5220065'), 200
-      mock.get '/projects/create.xml', headers, fixture_for('projects/create'), 200
-      mock.delete '/projects/5220065.xml', headers, '', 200
-      mock.put '/projects/5220065.xml', wheaders, '', 200
-      mock.post '/projects.xml', wheaders, '', 201, 'Location' => '/projects/create.xml'
+      mock.get '/projects.json', headers, fixture_for('projects'), 200
+      mock.get '/projects/5220065.json', headers, fixture_for('projects/5220065'), 200
+      mock.get '/projects/create.json', headers, fixture_for('projects/create'), 200
+      mock.delete '/projects/5220065.json', headers, '', 200
+      mock.put '/projects/5220065.json', wheaders, '', 200
+      mock.post '/projects.json', wheaders, '', 201, 'Location' => '/projects/create.json'
     end
   end
   

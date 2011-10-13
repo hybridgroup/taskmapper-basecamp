@@ -23,7 +23,7 @@ module TicketMaster::Provider
       end
       
       def self.search(project_id, options = {}, limit = 1000)
-        tickets = BasecampAPI::TodoList.find(:all, :params => {:project_id => project_id}).collect do |list|
+        tickets = ::Basecamp::TodoList.find(:all, :params => {:project_id => project_id}).collect do |list|
           list.todo_items.collect { |item|
             item.attributes['list'] = list
             item
