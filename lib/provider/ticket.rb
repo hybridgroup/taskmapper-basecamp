@@ -38,11 +38,11 @@ module TicketMaster::Provider
           list_id = options[0].delete(:todo_list_id) || options[0].delete('todo_list_id')
           project_id = options[0].delete(:project_id) || options[0].delete('project_id')
           if list_id.nil? and project_id
-            list_id = ::Basecamp::TodoList.create(:project_id => project_id, :name => 'New List').id
+            list_id = BasecampAPI::TodoList.create(:project_id => project_id, :name => 'New List').id
           end
           options[0][:todo_list_id] = list_id
         end
-        something = ::Basecamp::TodoItem.new(*options)
+        something = BasecampAPI::TodoItem.new(options.first)
         something.save
         self.new something
       end
