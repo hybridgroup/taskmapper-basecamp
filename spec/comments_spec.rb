@@ -24,7 +24,6 @@ describe "Ticketmaster::Provider::Basecamp::Comment" do
   end
 
   it "should be able to load all comments" do
-    puts @ticket.inspect
     @comments = @ticket.comments
     @comments.should be_an_instance_of(Array)
     @comments.first.should be_an_instance_of(@klass)

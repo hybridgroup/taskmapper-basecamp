@@ -18,7 +18,7 @@ module TicketMaster::Provider
       end
       
       def self.search(project_id, ticket_id, options = {}, limit = 1000)
-        comments = self::API.find(:all, :params => {:post_id => ticket_id}).collect { |c| self.new c }
+        comments = API.find(:all, :params => options.merge(:todo_item_id => ticket_id)).collect {|c| self.new c }
         search_by_attribute(comments, options, limit)
       end
       
