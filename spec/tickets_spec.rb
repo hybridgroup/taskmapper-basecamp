@@ -63,6 +63,11 @@ describe "Ticketmaster::Provider::Basecamp::Ticket" do
     @ticket.description = 'hello'
     @ticket.save.should == true
   end
+
+  it "should return a valid updated_at value for a ticket" do 
+    @ticket = @project.ticket(@ticket_id)
+    @ticket.updated_at.should == ""
+  end
   
   it "should be able to create a ticket" do
     @ticket = @project.ticket!(:todo_list_id => 9972756, :title => 'Ticket #12', :description => 'Body')
