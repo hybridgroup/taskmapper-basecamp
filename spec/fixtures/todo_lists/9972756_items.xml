@@ -5,6 +5,7 @@
     <completed type="boolean">false</completed>
     <content>oeoeuoeuoeuou</content>
     <created-at type="datetime">2010-07-20T23:36:49Z</created-at>
+    <updated-at type="datetime">2010-07-20T23:36:49Z</updated-at>
     <creator-id type="integer">5654019</creator-id>
     <due-at type="datetime" nil="true"></due-at>
     <id type="integer">62504112</id>
@@ -18,6 +19,7 @@
     <completed type="boolean">false</completed>
     <content>uoeuoeuoeu</content>
     <created-at type="datetime">2010-07-20T23:36:55Z</created-at>
+    <updated-at type="datetime">2010-07-20T23:36:49Z</updated-at>
     <creator-id type="integer">5654019</creator-id>
     <due-at type="datetime" nil="true"></due-at>
     <id type="integer">62504115</id>
@@ -34,6 +36,7 @@
     <completed type="boolean">false</completed>
     <content>eouoeuoeuoe</content>
     <created-at type="datetime">2010-07-20T23:37:02Z</created-at>
+    <updated-at type="datetime">2010-07-20T23:36:49Z</updated-at>
     <creator-id type="integer">5654019</creator-id>
     <due-at type="datetime">2010-07-22T07:00:00Z</due-at>
     <id type="integer">62504122</id>
@@ -50,6 +53,7 @@
     <completed type="boolean">false</completed>
     <content>TEHUNTHeuntah tnstn uhant uhaenothusaeuhts</content>
     <created-at type="datetime">2010-07-21T00:10:42Z</created-at>
+    <updated-at type="datetime">2010-07-20T23:36:49Z</updated-at>
     <creator-id type="integer">5654019</creator-id>
     <due-at type="datetime" nil="true"></due-at>
     <id type="integer">62505807</id>
@@ -63,6 +67,7 @@
     <completed type="boolean">false</completed>
     <content>ent</content>
     <created-at type="datetime">2010-07-21T00:10:42Z</created-at>
+    <updated-at type="datetime">2010-07-20T23:36:49Z</updated-at>
     <creator-id type="integer">5654019</creator-id>
     <due-at type="datetime" nil="true"></due-at>
     <id type="integer">62505809</id>
@@ -76,6 +81,7 @@
     <completed type="boolean">false</completed>
     <content>uoeuoeuoeu</content>
     <created-at type="datetime">2010-07-20T23:36:51Z</created-at>
+    <updated-at type="datetime">2010-07-20T23:36:49Z</updated-at>
     <creator-id type="integer">5654019</creator-id>
     <due-at type="datetime" nil="true"></due-at>
     <id type="integer">62504114</id>

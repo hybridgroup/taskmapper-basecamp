@@ -81,10 +81,6 @@ module TicketMaster::Provider
         self.content = titl
       end
 
-      def updated_at
-        self[:prefix_options].inspect
-      end
-      
       def updated_at=(comp)
         self.completed_on = comp
       end
