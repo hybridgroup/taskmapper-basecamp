@@ -13,7 +13,6 @@ begin
     gem.add_dependency "ticketmaster", ">= 0.6.6"
     gem.add_dependency "activesupport", "3.1.1"
     gem.add_dependency "activeresource", "3.1.1"
-    gem.add_dependency "basecamp", "0.0.6"
     gem.add_development_dependency "rspec", ">= 1.2.9"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
