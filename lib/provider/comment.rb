@@ -7,7 +7,7 @@ module TicketMaster::Provider
     #
     class Comment < TicketMaster::Provider::Base::Comment
       # declare needed overloaded methods here
-      API = ::Basecamp::Comment
+      API = BasecampAPI::Comment
       
       def self.find_by_id(project_id, ticket_id, id)
         self.new self::API.find(id)
@@ -18,7 +18,7 @@ module TicketMaster::Provider
       end
       
       def self.search(project_id, ticket_id, options = {}, limit = 1000)
-        comments = self::API.find(:all, :params => {:post_id => ticket_id}).collect { |c| self.new c }
+        comments = self::API.find(:all, :params => {:todo_item_id => ticket_id}).collect { |c| self.new c }
         search_by_attribute(comments, options, limit)
       end
       
