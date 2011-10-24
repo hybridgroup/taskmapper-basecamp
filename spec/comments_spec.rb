@@ -51,7 +51,6 @@ describe "Ticketmaster::Provider::Basecamp::Comment" do
   end
 
   it "should be able to load a comment based on attributes" do
-    pending
     @comment = @ticket.comment(:commentable_id => @ticket.id)
     @comment.should be_an_instance_of(@klass)
   end
