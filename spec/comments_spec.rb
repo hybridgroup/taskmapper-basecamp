@@ -10,8 +10,8 @@ describe "Ticketmaster::Provider::Basecamp::Comment" do
       mock.get '/todo_lists/9973518/todo_items.json', headers, fixture_for('todo_lists/9973518_items'), 200
       mock.get '/todo_lists/9972756/todo_items.json', headers, fixture_for('todo_lists/9972756_items'), 200
       mock.get '/todo_items/62509330/comments.json', headers, fixture_for('comments'), 200
-      mock.get '/comments/74197051.json', headers, fixture_for('comments/74197051'), 200
-      mock.get '/comments/74197096.json', headers, fixture_for('comments/74197096'), 200
+      mock.get '/todo_items/62509330/comments/74197051.json', headers, fixture_for('comments/74197051'), 200
+      mock.get '/todo_items/62509330/comments/74197096.json', headers, fixture_for('comments/74197096'), 200
       mock.post '/todo_items/62509330/comments.json', headers, '', 201
     end
     @ticketmaster = TicketMaster.new(:basecamp, :domain => 'ticketmaster.basecamphq.com', :token => '000000')
@@ -30,7 +30,6 @@ describe "Ticketmaster::Provider::Basecamp::Comment" do
   end
 
   it "should be able to load all comments based on 'id's" do # lighthouse comments don't have ids, so we're faking them
-    pending
     @comments = @ticket.comments([74197051, 74197096])
     @comments.should be_an_instance_of(Array)
     @comments.first.id.should == 74197051
@@ -46,7 +45,6 @@ describe "Ticketmaster::Provider::Basecamp::Comment" do
   end
 
   it "should be able to load a comment based on id" do
-    pending
     @comment = @ticket.comment(74197051)
     @comment.should be_an_instance_of(@klass)
     @comment.id.should == 74197051

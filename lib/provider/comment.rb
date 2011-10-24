@@ -10,7 +10,7 @@ module TicketMaster::Provider
       API = BasecampAPI::Comment
       
       def self.find_by_id(project_id, ticket_id, id)
-        self.new self::API.find(id)
+        self.new self::API.find(id, :params => {:todo_item_id => ticket_id})
       end
       
       def self.find_by_attributes(project_id, ticket_id, attributes = {})
