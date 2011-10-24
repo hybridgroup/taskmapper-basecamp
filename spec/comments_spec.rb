@@ -38,7 +38,6 @@ describe "Ticketmaster::Provider::Basecamp::Comment" do
   end
 
   it "should be able to load all comments based on attributes" do
-    pending
     @comments = @ticket.comments(:commentable_id => @ticket.id)
     @comments.should be_an_instance_of(Array)
     @comments.first.should be_an_instance_of(@klass)
