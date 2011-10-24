@@ -56,7 +56,6 @@ describe "Ticketmaster::Provider::Basecamp::Comment" do
   end
 
   it "should return the class" do
-    pending
     @ticket.comment.should == @klass
   end
 
