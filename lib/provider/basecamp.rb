@@ -27,8 +27,7 @@ module TicketMaster::Provider
 
     def valid?
       begin
-        project_count = BasecampAPI::Project.find(:count)
-        project_count.active >= 0 || project_count.archived >= 0 || project_count.on_hold >= 0
+        !project_count = BasecampAPI::People.find(:me).nil?
       rescue
         false
       end

@@ -23,7 +23,7 @@ module TicketMaster::Provider
       end
       
       def self.search(project_id, options = {}, limit = 1000)
-        tickets = ::Basecamp::TodoList.find(:all, :params => {:project_id => project_id}).collect do |list|
+        tickets = BasecampAPI::TodoList.find(:all, :params => {:project_id => project_id}).collect do |list|
           list.todo_items.collect { |item|
             item.attributes['list'] = list
             item
@@ -38,7 +38,7 @@ module TicketMaster::Provider
           list_id = options[0].delete(:todo_list_id) || options[0].delete('todo_list_id')
           project_id = options[0].delete(:project_id) || options[0].delete('project_id')
           if list_id.nil? and project_id
-            list_id = ::Basecamp::TodoList.create(:project_id => project_id, :name => 'New List').id
+            list_id = BasecampAPI::TodoList.create(:project_id => project_id, :name => 'New List').id
           end
           options[0][:todo_list_id] = list_id
         end
@@ -104,10 +104,6 @@ module TicketMaster::Provider
       def comment!(*options)
         options[0].merge!(:todo_item_id => id) if options.first.is_a?(Hash)
         self.class.parent::Comment.create(*options)
-      end
-
-      def comments(*options)
-        Comment.find(self.project_id, self.ticket_id, options)
       end
 
     end

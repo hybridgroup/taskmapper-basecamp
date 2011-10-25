@@ -165,7 +165,6 @@ class BasecampAPI
 
   class Resource < ActiveResource::Base #:nodoc:
     #self.format = ActiveResource::Formats::JSONFormat # for 6.1 capability
-    
     class << self
       def parent_resources(*parents)
         @parent_resources = parents
@@ -198,6 +197,9 @@ class BasecampAPI
   end
 
   class Account < Resource
+  end
+
+  class People < Resource
   end
 
   class Project < Resource
