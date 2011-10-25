@@ -63,7 +63,7 @@ describe "Ticketmaster::Provider::Basecamp::Ticket" do
     @ticket.description = 'hello'
     @ticket.save.should == true
   end
-  
+
   it "should be able to create a ticket" do
     @ticket = @project.ticket!(:todo_list_id => 9972756, :title => 'Ticket #12', :description => 'Body')
     @ticket.should be_an_instance_of(@klass)
