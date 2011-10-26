@@ -46,6 +46,21 @@ module TicketMaster::Provider
         options[0].merge!(:project_id => id) if options.first.is_a?(Hash)
         self.class.parent::Ticket.create(*options)
       end
+
+      def self.find_by_id(id)
+        self.new API.find(id)
+      end
+
+      def self.find_by_attributes(attributes = {})
+        self.search(attributes)
+      end
+
+      def self.search(options = {}, limit = 1000)
+        puts "searching projects"
+        projects = API.find(:all)
+        projects.collect { |project| self.new project }
+        search_by_attribute(projects, options, limit)
+      end
       
       # copy from this.copy(that) copies that into this
       def copy(project)

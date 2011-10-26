@@ -165,6 +165,7 @@ class BasecampAPI
 
   class Resource < ActiveResource::Base #:nodoc:
     #self.format = ActiveResource::Formats::JSONFormat # for 6.1 capability
+    self.format = :xml
     class << self
       def parent_resources(*parents)
         @parent_resources = parents
