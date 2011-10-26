@@ -56,9 +56,7 @@ module TicketMaster::Provider
       end
 
       def self.search(options = {}, limit = 1000)
-        puts "searching projects"
-        projects = API.find(:all)
-        projects.collect { |project| self.new project }
+        projects = API.find(:all).collect { |project| self.new project }
         search_by_attribute(projects, options, limit)
       end
       
