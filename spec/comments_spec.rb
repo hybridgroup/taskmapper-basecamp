@@ -2,17 +2,17 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe "Ticketmaster::Provider::Basecamp::Comment" do
   before(:each) do
-    headers = {'Authorization' => 'Basic MDAwMDAwOkJhc2VjYW1w', 'Accept' => 'application/json'}
+    headers = {'Authorization' => 'Basic MDAwMDAwOkJhc2VjYW1w', 'Accept' => 'application/xml'}
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get '/projects.json', headers, fixture_for('projects'), 200
-      mock.get '/projects/5220065.json', headers, fixture_for('projects/5220065'), 200
-      mock.get '/projects/5220065/todo_lists.json', headers, fixture_for('todo_lists'), 200
-      mock.get '/todo_lists/9973518/todo_items.json', headers, fixture_for('todo_lists/9973518_items'), 200
-      mock.get '/todo_lists/9972756/todo_items.json', headers, fixture_for('todo_lists/9972756_items'), 200
-      mock.get '/todo_items/62509330/comments.json', headers, fixture_for('comments'), 200
-      mock.get '/todo_items/62509330/comments/74197051.json', headers, fixture_for('comments/74197051'), 200
-      mock.get '/todo_items/62509330/comments/74197096.json', headers, fixture_for('comments/74197096'), 200
-      mock.post '/todo_items/62509330/comments.json', headers, '', 201
+      mock.get '/projects.xml', headers, fixture_for('projects'), 200
+      mock.get '/projects/5220065.xml', headers, fixture_for('projects/5220065'), 200
+      mock.get '/projects/5220065/todo_lists.xml', headers, fixture_for('todo_lists'), 200
+      mock.get '/todo_lists/9973518/todo_items.xml', headers, fixture_for('todo_lists/9973518_items'), 200
+      mock.get '/todo_lists/9972756/todo_items.xml', headers, fixture_for('todo_lists/9972756_items'), 200
+      mock.get '/todo_items/62509330/comments.xml', headers, fixture_for('comments'), 200
+      mock.get '/todo_items/62509330/comments/74197051.xml', headers, fixture_for('comments/74197051'), 200
+      mock.get '/todo_items/62509330/comments/74197096.xml', headers, fixture_for('comments/74197096'), 200
+      mock.post '/todo_items/62509330/comments.xml', headers, '', 201
     end
     @ticketmaster = TicketMaster.new(:basecamp, :domain => 'ticketmaster.basecamphq.com', :token => '000000')
     @project = @ticketmaster.projects(@project_id).first
