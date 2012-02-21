@@ -9,6 +9,23 @@ module TicketMaster::Provider
     # updated_at => last_changed_on
     class Project < TicketMaster::Provider::Base::Project
       API = BasecampAPI::Project
+
+      def initialize(*object) 
+        if object.first 
+          object = object.first
+          unless object.is_a? Hash
+            hash = {:id => object.id,
+                    :created_at => created_on,
+                    :updated_at => updated_on,
+                    :description => object.announcement,
+                    :name => object.name}
+
+          else
+            hash = object
+          end
+          super hash
+        end
+      end
       
       def description
         announcement
