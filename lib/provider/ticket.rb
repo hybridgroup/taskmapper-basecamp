@@ -14,6 +14,7 @@ module TicketMaster::Provider
     # * project_id
     class Ticket < TicketMaster::Provider::Base::Ticket
       attr_accessor :list
+
       def self.find_by_id(project_id, id)
         self.search(project_id, {'id' => id}).first
       end
@@ -28,7 +29,7 @@ module TicketMaster::Provider
             item.attributes['list'] = list
             item
             }
-          end.flatten.collect { |ticket| self.new(ticket, ticket.attributes.delete('list')) }
+          end.flatten.collect { |ticket| self.new(ticket.attributes.merge!(:project_id => project_id)) }
         search_by_attribute(tickets, options, limit)
       end
       
@@ -47,17 +48,24 @@ module TicketMaster::Provider
         self.new something
       end
       
-      def initialize(ticket, list = nil)
-        @system_data ||= {}
-        @cache ||= {}
-        @list = list
-        case ticket
-          when Hash
-            super(ticket.to_hash)
+      def initialize(*object)
+        if object.first 
+          object = object.first
+          unless object.is_a? Hash
+            hash = {:id => object.id,
+                    :completed => object.completed,
+                    :title => object.content,
+                    :content => object.content,
+                    :project_id => object.project_id,
+                    :priority => object.position, 
+                    :position => object.position,
+                    :description => object.description,
+                    :assignee => object.creator_name,
+                    :requestor => object.requestor}
           else
-            @system_data[:client] = ticket
-            self.prefix_options ||= @system_data[:client].prefix_options if @system_data[:client].prefix_options
-            super(ticket.attributes)
+            hash = object
+          end
+          super hash
         end
       end
       
@@ -74,7 +82,7 @@ module TicketMaster::Provider
       end
       
       def title
-        "#{@list.name} - #{content[0..100]}"
+        self.content
       end
       
       def title=(titl)
