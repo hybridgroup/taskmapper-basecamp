@@ -30,6 +30,10 @@ GEM
     rspec-expectations (2.3.0)
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.3.0)
+    simplecov (0.5.4)
+      multi_json (~> 1.0.3)
+      simplecov-html (~> 0.5.3)
+    simplecov-html (0.5.3)
     ticketmaster (0.6.7)
       activeresource
       activeresource (>= 2.3.2)
@@ -45,7 +49,8 @@ PLATFORMS
 DEPENDENCIES
   bundler (~> 1.0.0)
   jeweler (~> 1.6.4)
-  rcov
+  rcov (~> 1.0.0)
   rspec (~> 2.3.0)
+  simplecov (~> 0.5.0)
   ticketmaster (~> 0.6.0)
   xml-simple (~> 1.1.1)
