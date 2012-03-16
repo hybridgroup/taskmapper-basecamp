@@ -4,20 +4,23 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = %q{ticketmaster-basecamp}
-  s.version = "0.3.8"
+  s.name = "ticketmaster-basecamp"
+  s.version = "0.3.9"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["HybridGroup"]
-  s.date = %q{2011-10-26}
-  s.description = %q{This gem provides an interface to basecamp through the ticketmaster gem}
-  s.email = %q{hong.quach@abigfisch.com}
+  s.date = "2012-03-16"
+  s.description = "This gem provides an interface to basecamp through the ticketmaster gem"
+  s.email = "hong.quach@abigfisch.com"
   s.extra_rdoc_files = [
     "LICENSE",
     "README.md"
   ]
   s.files = [
     ".document",
+    ".travis.yml",
+    "Gemfile",
+    "Gemfile.lock",
     "LICENSE",
     "README.md",
     "Rakefile",
@@ -56,30 +59,36 @@ Gem::Specification.new do |s|
     "spec/tickets_spec.rb",
     "ticketmaster-basecamp.gemspec"
   ]
-  s.homepage = %q{http://github.com/kiafaldorius/ticketmaster-basecamp}
+  s.homepage = "http://github.com/kiafaldorius/ticketmaster-basecamp"
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.6.1}
-  s.summary = %q{The basecamp provider for ticketmaster}
+  s.rubygems_version = "1.8.17"
+  s.summary = "The basecamp provider for ticketmaster"
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<ticketmaster>, [">= 0.6.6"])
-      s.add_runtime_dependency(%q<activesupport>, ["= 3.1.1"])
-      s.add_runtime_dependency(%q<activeresource>, ["= 3.1.1"])
-      s.add_development_dependency(%q<rspec>, [">= 1.2.9"])
+      s.add_runtime_dependency(%q<ticketmaster>, ["= 0.6.10"])
+      s.add_runtime_dependency(%q<xml-simple>, ["~> 1.1"])
+      s.add_development_dependency(%q<rspec>, ["~> 2.3"])
+      s.add_development_dependency(%q<jeweler>, ["~> 1.6"])
+      s.add_development_dependency(%q<simplecov>, ["~> 0.5"])
+      s.add_development_dependency(%q<rcov>, ["~> 1.0"])
     else
-      s.add_dependency(%q<ticketmaster>, [">= 0.6.6"])
-      s.add_dependency(%q<activesupport>, ["= 3.1.1"])
-      s.add_dependency(%q<activeresource>, ["= 3.1.1"])
-      s.add_dependency(%q<rspec>, [">= 1.2.9"])
+      s.add_dependency(%q<ticketmaster>, ["= 0.6.10"])
+      s.add_dependency(%q<xml-simple>, ["~> 1.1"])
+      s.add_dependency(%q<rspec>, ["~> 2.3"])
+      s.add_dependency(%q<jeweler>, ["~> 1.6"])
+      s.add_dependency(%q<simplecov>, ["~> 0.5"])
+      s.add_dependency(%q<rcov>, ["~> 1.0"])
     end
   else
-    s.add_dependency(%q<ticketmaster>, [">= 0.6.6"])
-    s.add_dependency(%q<activesupport>, ["= 3.1.1"])
-    s.add_dependency(%q<activeresource>, ["= 3.1.1"])
-    s.add_dependency(%q<rspec>, [">= 1.2.9"])
+    s.add_dependency(%q<ticketmaster>, ["= 0.6.10"])
+    s.add_dependency(%q<xml-simple>, ["~> 1.1"])
+    s.add_dependency(%q<rspec>, ["~> 2.3"])
+    s.add_dependency(%q<jeweler>, ["~> 1.6"])
+    s.add_dependency(%q<simplecov>, ["~> 0.5"])
+    s.add_dependency(%q<rcov>, ["~> 1.0"])
   end
 end
 
