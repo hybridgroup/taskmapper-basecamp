@@ -38,13 +38,16 @@ module TicketMaster::Provider
         if options.first.is_a?(Hash)
           list_id = options[0].delete(:todo_list_id) || options[0].delete('todo_list_id')
           project_id = options[0].delete(:project_id) || options[0].delete('project_id')
+          title = options[0].delete(:title) || options[0].delete('title')
           if list_id.nil? and project_id
             list_id = BasecampAPI::TodoList.create(:project_id => project_id, :name => 'New List').id
           end
           options[0][:todo_list_id] = list_id
+          options[0][:content] = title
         end
         something = BasecampAPI::TodoItem.new(options.first)
         something.save
+        puts "DBG: #{something.inspect}"
         self.new something
       end
 
