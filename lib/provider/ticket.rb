@@ -18,7 +18,7 @@ module TicketMaster::Provider
       def self.find_by_id(project_id, id)
         self.search(project_id, {'id' => id}).first
       end
-      
+
       def self.find_by_attributes(project_id, attributes = {})
         self.search(project_id, attributes)
       end
@@ -28,11 +28,11 @@ module TicketMaster::Provider
           list.todo_items.collect { |item|
             item.attributes['list'] = list
             item
-            }
-          end.flatten.collect { |ticket| self.new(ticket.attributes.merge!(:project_id => project_id)) }
+          }
+        end.flatten.collect { |ticket| self.new(ticket.attributes.merge!(:project_id => project_id)) }
         search_by_attribute(tickets, options, limit)
       end
-      
+
       # It expects a single hash
       def self.create(*options)
         if options.first.is_a?(Hash)
@@ -47,44 +47,23 @@ module TicketMaster::Provider
         something.save
         self.new something
       end
-      
-      def initialize(*object)
-        if object.first 
-          object = object.first
-          unless object.is_a? Hash
-            hash = {:id => object.id,
-                    :completed => object.completed,
-                    :title => object.content,
-                    :content => object.content,
-                    :project_id => object.project_id,
-                    :priority => object.position, 
-                    :position => object.position,
-                    :description => object.description,
-                    :assignee => object.creator_name,
-                    :requestor => object.requestor}
-          else
-            hash = object
-          end
-          super hash
-        end
-      end
-      
+
       def status
         self.completed ? 'completed' : 'incomplete'
       end
-      
+
       def priority
         self.position
       end
-      
+
       def priority=(pri)
         self.position = pri
       end
-      
+
       def title
         self.content
       end
-      
+
       def title=(titl)
         self.content = titl
       end
@@ -92,23 +71,23 @@ module TicketMaster::Provider
       def updated_at=(comp)
         self.completed_on = comp
       end
-      
+
       def description
         self.content
       end
-      
+
       def description=(desc)
         self.content = desc
       end
-      
+
       def assignee
         self.responsible_party_name
       end
-      
+
       def requestor
         self.creator_name
       end
-      
+
       def comment!(*options)
         options[0].merge!(:todo_item_id => id) if options.first.is_a?(Hash)
         self.class.parent::Comment.create(*options)
