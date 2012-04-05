@@ -24,7 +24,6 @@ module TicketMaster::Provider
           super(first.to_hash)
         else
           @system_data[:client] = first
-          self.prefix_options ||= @system_data[:client].prefix_options if @system_data[:client].prefix_options
           super(first.attributes)
         end
       end
@@ -61,6 +60,7 @@ module TicketMaster::Provider
         end
         something = BasecampAPI::TodoItem.new(options.first)
         something.save
+        self.find_by_id(project_id, something.attributes[:id])
       end
 
       def status
