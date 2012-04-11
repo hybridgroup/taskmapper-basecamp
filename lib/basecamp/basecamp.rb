@@ -192,9 +192,9 @@ class BasecampAPI
       end
     end
 
-    def prefix_options
-      id ? {} : super
-    end
+    #def prefix_options
+    #  id ? {} : super
+    #end
   end
 
   class Account < Resource
