@@ -9,7 +9,9 @@ describe "Ticketmaster::Provider::Basecamp::Ticket" do
       mock.get '/projects/5220065/todo_lists.xml', headers, fixture_for('todo_lists'), 200
       mock.get '/todo_lists/9973518/todo_items.xml', headers, fixture_for('todo_lists/9973518_items'), 200
       mock.get '/todo_lists/9972756/todo_items.xml', headers, fixture_for('todo_lists/9972756_items'), 200
+      mock.get '/todo_lists/9973518/todo_items/62509330.xml', headers, fixture_for('todo_items/62509330_todo_item'), 200
       mock.put '/todo_items/62509330.xml', wheaders, '', 200
+      mock.put '/todo_lists/9973518/todo_items/62509330.xml', wheaders, '', 200
       mock.post '/todo_lists/9972756/todo_items.xml', wheaders, fixture_for('todo_lists/create'), 201
     end
     @project_id = 5220065
@@ -58,10 +60,7 @@ describe "Ticketmaster::Provider::Basecamp::Ticket" do
   end
 
   it "should be able to update and save a ticket" do
-    pending
     @ticket = @project.ticket(@ticket_id)
-    @ticket.save.should == nil
-    @ticket.description = 'hello'
     @ticket.save.should == true
   end
 

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<todo-item>
+  <comments-count type="integer">0</comments-count>
+  <completed type="boolean">false</completed>
+  <content>hudnthdau</content>
+  <created-at type="datetime">2010-07-21T01:14:34Z</created-at>
+  <updated-at type="datetime">2010-07-20T23:36:49Z</updated-at>
+  <creator-id type="integer">5654019</creator-id>
+  <due-at type="datetime" nil="true"></due-at>
+  <id type="integer">62509330</id>
+  <position type="integer">1</position>
+  <todo-list-id type="integer">9973518</todo-list-id>
+  <created-on type="datetime" deprecated="true">2010-07-21T01:14:34Z</created-on>
+  <creator-name>Kia Kroas</creator-name>
+</todo-item>
