@@ -13,7 +13,6 @@ module TicketMaster::Provider
     # * requestor => creator_name (read-only)
     # * project_id
     class Ticket < TicketMaster::Provider::Base::Ticket
-      attr_accessor :list
 
       def initialize(*options)
         @system_data ||= {}
@@ -62,7 +61,22 @@ module TicketMaster::Provider
         something.save
         self.find_by_id(project_id, something.attributes[:id])
       end
-
+      
+      def save
+        todo_item = BasecampAPI::TodoItem.find id, :params => { :todo_list_id => list.id }
+        copy_to(todo_item)
+        todo_item.save
+      end
+      
+      def copy_to(todo_item)
+        todo_item.completed = status
+        todo_item.position = priority
+        todo_item.name = title
+        todo_item.completed = resolution
+        todo_item.responsible_party_name = assignee
+        todo_item.creator_name = requestor
+      end
+            
       def status
         self.completed ? 'completed' : 'incomplete'
       end
