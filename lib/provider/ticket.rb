@@ -96,7 +96,7 @@ module TicketMaster::Provider
       def copy_to(todo_item)
         todo_item.completed = status
         todo_item.position = priority
-        todo_item.content = title
+        todo_item.content = title |= description
         todo_item.responsible_party_name = assignee
         todo_item.creator_name = requestor
         todo_item
