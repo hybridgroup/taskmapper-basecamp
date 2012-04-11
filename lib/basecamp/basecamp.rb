@@ -191,7 +191,8 @@ class BasecampAPI
         end
       end
     end
-
+    
+    # Commented because it was causing a Missing prefix error when updating a TodoItem
     #def prefix_options
     #  id ? {} : super
     #end
