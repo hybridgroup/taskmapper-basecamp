@@ -90,8 +90,7 @@ module TicketMaster::Provider
 
       def save
         todo_item = BasecampAPI::TodoItem.find id, :params => { :todo_list_id => list.id }
-        copy_to(todo_item)
-        todo_item.save
+        copy_to(todo_item).save
       end
 
       def copy_to(todo_item)
@@ -101,6 +100,7 @@ module TicketMaster::Provider
         todo_item.completed = resolution
         todo_item.responsible_party_name = assignee
         todo_item.creator_name = requestor
+        todo_item
       end
 
 
