@@ -28,39 +28,42 @@ module TicketMaster::Provider
         end
       end
 
-      def self.find_by_id(project_id, id)
-        self.search(project_id, {'id' => id}).first
-      end
+      class << self
 
-      def self.find_by_attributes(project_id, attributes = {})
-        self.search(project_id, attributes)
-      end
-
-      def self.search(project_id, options = {}, limit = 1000)
-        tickets = BasecampAPI::TodoList.find(:all, :params => {:project_id => project_id}).collect do |list|
-          list.todo_items.collect { |item|
-            item.attributes['list'] = list
-            item
-          }
-        end.flatten.collect { |ticket| self.new(ticket.attributes.merge!(:project_id => project_id)) }
-        search_by_attribute(tickets, options, limit)
-      end
-
-      # It expects a single hash
-      def self.create(*options)
-        if options.first.is_a?(Hash)
-          list_id = options[0].delete(:todo_list_id) || options[0].delete('todo_list_id')
-          project_id = options[0].delete(:project_id) || options[0].delete('project_id')
-          title = options[0].delete(:title) || options[0].delete('title')
-          if list_id.nil? and project_id
-            list_id = BasecampAPI::TodoList.create(:project_id => project_id, :name => 'New List').id
-          end
-          options[0][:todo_list_id] = list_id
-          options[0][:content] = title
+        def find_by_id(project_id, id)
+          find_by_attributes(project_id, {:id => id}).first
         end
-        something = BasecampAPI::TodoItem.new(options.first)
-        something.save
-        self.find_by_id(project_id, something.attributes[:id])
+
+        def find_by_attributes(project_id, attributes = {})
+          search(project_id, attributes)
+        end
+
+        def search(project_id, options = {}, limit = 1000)
+          tickets = BasecampAPI::TodoList.find(:all, :params => {:project_id => project_id}).collect do |list|
+            list.todo_items.collect { |item|
+              item.attributes['list'] = list
+              item
+            }
+          end.flatten.collect { |ticket| self.new(ticket.attributes.merge!(:project_id => project_id)) }
+          search_by_attribute(tickets, options, limit)
+        end
+
+        # It expects a single hash
+        def create(*options)
+          if options.first.is_a?(Hash)
+            list_id = options[0].delete(:todo_list_id) || options[0].delete('todo_list_id')
+            project_id = options[0].delete(:project_id) || options[0].delete('project_id')
+            title = options[0].delete(:title) || options[0].delete('title')
+            if list_id.nil? and project_id
+              list_id = BasecampAPI::TodoList.create(:project_id => project_id, :name => 'New List').id
+            end
+            options[0][:todo_list_id] = list_id
+            options[0][:content] = title
+          end
+          something = BasecampAPI::TodoItem.new(options.first)
+          something.save
+          find_by_id(project_id, something.attributes[:id])
+        end
       end
 
       def status

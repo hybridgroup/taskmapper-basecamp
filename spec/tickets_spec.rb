@@ -67,7 +67,7 @@ describe "Ticketmaster::Provider::Basecamp::Ticket" do
 
   it "should be able to create a ticket" do
     @ticket = @project.ticket!(:todo_list_id => 9972756, :title => 'Ticket #12', :description => 'Body')
-    @ticket.should_not be_an_instance_of(@klass)
+    @ticket.should be_an_instance_of(@klass)
   end
 
 end
