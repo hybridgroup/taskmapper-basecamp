@@ -59,6 +59,10 @@ module TicketMaster::Provider
         last_changed_on = updated
       end
       
+      def ticket!(attributes_hash)
+        provider_parent(self.class)::Ticket.create attributes_hash.merge :project_id => id
+      end
+      
       def self.find_by_id(id)
         self.new API.find(id)
       end
