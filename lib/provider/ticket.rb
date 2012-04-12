@@ -53,7 +53,7 @@ module TicketMaster::Provider
           list_id = arguments_for_ticket.delete(:todo_list_id)
           project_id = arguments_for_ticket.delete(:project_id)
           title = arguments_for_ticket.delete(:title)
-          if should_create_todolist?(list_id, project_id)
+          if should_create_todolist?(list_id)
             list_id = create_todo_list(list_id, project_id, title).id
           end
           arguments_for_ticket[:todo_list_id] = list_id
@@ -64,8 +64,8 @@ module TicketMaster::Provider
         end
 
         private
-        def should_create_todolist?(list_id, project_id)
-          list_id.nil? and project_id
+        def should_create_todolist?(list_id)
+          list_id.nil? 
         end
 
         def create_todo_list(list_id, project_id, title)
