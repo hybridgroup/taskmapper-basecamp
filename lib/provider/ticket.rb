@@ -58,9 +58,8 @@ module TicketMaster::Provider
           end
           arguments_for_ticket[:todo_list_id] = list_id
           arguments_for_ticket[:content] = title
-          something = BasecampAPI::TodoItem.new(arguments_for_ticket)
-          something.save
-          self.new something
+          todo_item = BasecampAPI::TodoItem.new(arguments_for_ticket)
+          todo_item.save ? self.new(todo_item.attributes.merge!(:project_id => project_id)) : nil
         end
 
         private
