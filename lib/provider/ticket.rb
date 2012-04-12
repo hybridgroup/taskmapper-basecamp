@@ -49,21 +49,29 @@ module TicketMaster::Provider
         end
 
         # It expects a single hash
-        def create(*options)
-          if options.first.is_a?(Hash)
-            list_id = options[0].delete(:todo_list_id) || options[0].delete('todo_list_id')
-            project_id = options[0].delete(:project_id) || options[0].delete('project_id')
-            title = options[0].delete(:title) || options[0].delete('title')
-            if list_id.nil? and project_id
-              list_id = BasecampAPI::TodoList.create(:project_id => project_id, :name => 'New List').id
-            end
-            options[0][:todo_list_id] = list_id
-            options[0][:content] = title
+        def create(arguments_for_ticket)
+          list_id = arguments_for_ticket.delete(:todo_list_id)
+          project_id = arguments_for_ticket.delete(:project_id)
+          title = arguments_for_ticket.delete(:title)
+          if should_create_todolist?(list_id, project_id)
+            list_id = create_todo_list(list_id, project_id).id
           end
-          something = BasecampAPI::TodoItem.new(options.first)
+          arguments_for_ticket[:todo_list_id] = list_id
+          arguments_for_ticket[:content] = title
+          something = BasecampAPI::TodoItem.new(arguments_for_ticket)
           something.save
-          find_by_id(project_id, something.attributes[:id])
+          self.new something
         end
+
+        private
+        def should_create_todolist?(list_id, project_id)
+          list_id.nil? and project_id
+        end
+
+        def create_todo_list(list_id, project_id)
+          BasecampAPI::TodoList.create(:project_id => project_id, :name => title)
+        end
+
       end
 
       def status
