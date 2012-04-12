@@ -49,71 +49,77 @@ module TicketMaster::Provider
         end
 
         # It expects a single hash
-        def create(arguments_for_ticket)
-          list_id = arguments_for_ticket.delete(:todo_list_id)
-          project_id = arguments_for_ticket.delete(:project_id)
-          title = arguments_for_ticket.delete(:title)
-          if list_id.nil?
-            list_id = create_todo_list(list_id, project_id, title).id
-          end
-          arguments_for_ticket[:todo_list_id] = list_id
-          arguments_for_ticket[:content] = title
-          todo_item = BasecampAPI::TodoItem.new(arguments_for_ticket)
-          todo_item.save ? self.new(todo_item.attributes.merge!(:project_id => project_id)) : nil
+        def create(attributes_hash)
+          attributes_hash[:todo_list_id] ||= create_todo_list(attributes_hash[:project_id]).id 
+          attributes_hash[:content] = attributes_hash[:title]
+          project_id = attributes_hash[:project_id]
+
+          normalize_todo_item_attributes(attributes_hash)
+          todoitem = create_todo_item(attributes_hash)
+          todoitem.save ? self.new(todoitem.attributes.merge! :project_id => project_id) : nil
         end
 
         private
-        def create_todo_list(list_id, project_id, title)
-          BasecampAPI::TodoList.create(:project_id => project_id, :name => title)
+        def normalize_todo_item_attributes(attributes_hash)
+          attributes_hash.delete(:project_id)
+          attributes_hash.delete(:title)
         end
 
-      end
+        def create_todo_item(attributes_hash)
+          BasecampAPI::TodoItem.new(attributes_hash)
+        end
 
-      def status
-        self.completed ? 'completed' : 'incomplete'
+        def create_todo_list(project_id)
+          BasecampAPI::TodoList.create(:project_id => project_id, :name => title)
+        end
       end
-
-      def priority
-        self.position
-      end
-
-      def priority=(pri)
-        self.position = pri
-      end
-
-      def title
-        self.content
-      end
-
-      def title=(titl)
-        self.content = titl
-      end
-
-      def updated_at=(comp)
-        self.completed_on = comp
-      end
-
-      def description
-        self.content
-      end
-
-      def description=(desc)
-        self.content = desc
-      end
-
-      def assignee
-        self.responsible_party_name
-      end
-
-      def requestor
-        self.creator_name
-      end
-
-      def comment!(*options)
-        options[0].merge!(:todo_item_id => id) if options.first.is_a?(Hash)
-        self.class.parent::Comment.create(*options)
-      end
-
     end
+
   end
+
+  def status
+    self.completed ? 'completed' : 'incomplete'
+  end
+
+  def priority
+    self.position
+  end
+
+  def priority=(pri)
+    self.position = pri
+  end
+
+  def title
+    self.content
+  end
+
+  def title=(titl)
+    self.content = titl
+  end
+
+  def updated_at=(comp)
+    self.completed_on = comp
+  end
+
+  def description
+    self.content
+  end
+
+  def description=(desc)
+    self.content = desc
+  end
+
+  def assignee
+    self.responsible_party_name
+  end
+
+  def requestor
+    self.creator_name
+  end
+
+  def comment!(*options)
+    options[0].merge!(:todo_item_id => id) if options.first.is_a?(Hash)
+    self.class.parent::Comment.create(*options)
+  end
+
 end
