@@ -54,7 +54,7 @@ module TicketMaster::Provider
           project_id = arguments_for_ticket.delete(:project_id)
           title = arguments_for_ticket.delete(:title)
           if should_create_todolist?(list_id, project_id)
-            list_id = create_todo_list(list_id, project_id).id
+            list_id = create_todo_list(list_id, project_id, title).id
           end
           arguments_for_ticket[:todo_list_id] = list_id
           arguments_for_ticket[:content] = title
@@ -68,7 +68,7 @@ module TicketMaster::Provider
           list_id.nil? and project_id
         end
 
-        def create_todo_list(list_id, project_id)
+        def create_todo_list(list_id, project_id, title)
           BasecampAPI::TodoList.create(:project_id => project_id, :name => title)
         end
 
