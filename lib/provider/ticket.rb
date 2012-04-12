@@ -54,18 +54,18 @@ module TicketMaster::Provider
           attributes_hash[:content] = attributes_hash[:title]
           project_id = attributes_hash[:project_id]
 
-          normalize_todo_item_attributes(attributes_hash)
           todoitem = create_todo_item(attributes_hash)
           todoitem.save ? self.new(todoitem.attributes.merge! :project_id => project_id) : nil
         end
 
         private
-        def normalize_todo_item_attributes(attributes_hash)
+        def delete_fields_from(attributes_hash)
           attributes_hash.delete(:project_id)
           attributes_hash.delete(:title)
         end
 
         def create_todo_item(attributes_hash)
+          delete_fields_from(attributes_hash)
           BasecampAPI::TodoItem.new(attributes_hash)
         end
 
