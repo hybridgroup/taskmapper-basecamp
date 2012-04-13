@@ -50,27 +50,42 @@ module TicketMaster::Provider
 
         # It expects a single hash
         def create(attributes_hash)
-          attributes_hash[:todo_list_id] ||= create_todo_list(attributes_hash[:project_id]).id 
-          attributes_hash[:content] = attributes_hash[:title]
-          project_id = attributes_hash[:project_id]
-
-          todoitem = create_todo_item(attributes_hash)
-          todoitem.save ? self.new(todoitem.attributes.merge! :project_id => project_id) : nil
+          todo_item_hash = create_todo_item_hash attributes_hash
+          todo_item = create_todo_item todo_item_hash
+          
+          return nil unless todo_item.save
+          
+          todo_item.project_id = attributes_hash[:project_id]
+          todo_item.todo_list_id = todo_item_hash[:todo_list_id]
+          self.new(todo_item)
         end
 
         private
-        def delete_fields_from(attributes_hash)
-          attributes_hash.delete(:project_id)
-          attributes_hash.delete(:title)
+        
+        def create_todo_item_hash(ticket_hash)
+          a = ticket_hash
+          validate_ticket_hash a
+          todo_item_hash = {
+            :content => a[:title],
+            :position => a[:priority] ||= 1,
+            :todo_list_id => a[:todo_list_id] ||= create_todo_list({
+              :project_id => a[:project_id], 
+              :name => "#{a[:title]} list"  
+            }).id
+          }
         end
-
+        
         def create_todo_item(attributes_hash)
-          delete_fields_from(attributes_hash)
           BasecampAPI::TodoItem.new(attributes_hash)
         end
+        
+        def validate_ticket_hash(attributes_hash)
+          title = attributes_hash[:title]
+          raise ArgumentError.new "Title is required" if title.nil? or title.empty?
+        end
 
-        def create_todo_list(project_id)
-          BasecampAPI::TodoList.create(:project_id => project_id, :name => title)
+        def create_todo_list(attributes)
+          BasecampAPI::TodoList.create(attributes)
         end
       end
     end

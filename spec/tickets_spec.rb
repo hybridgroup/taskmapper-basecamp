@@ -69,6 +69,7 @@ describe "Ticketmaster::Provider::Basecamp::Ticket" do
     @ticket = @project.ticket!(:todo_list_id => 9972756, :title => 'Ticket #12', :description => 'Body')
     @ticket.should be_an_instance_of(@klass)
     @ticket.project_id.should_not be_nil
+    @ticket.todo_list_id.should_not be_nil
   end
 
 end
