@@ -10,6 +10,7 @@ describe "Ticketmaster::Provider::Basecamp::Ticket" do
       mock.get '/todo_lists/9973518/todo_items.xml', headers, fixture_for('todo_lists/9973518_items'), 200
       mock.get '/todo_lists/9972756/todo_items.xml', headers, fixture_for('todo_lists/9972756_items'), 200
       mock.put '/todo_items/62509330.xml', wheaders, '', 200
+      mock.post '/projects/5220065/todo_lists.xml', wheaders, fixture_for('todo_list_9972756'), 201
       mock.post '/todo_lists/9972756/todo_items.xml', wheaders, fixture_for('todo_lists/create'), 201
     end
     @project_id = 5220065
@@ -67,6 +68,13 @@ describe "Ticketmaster::Provider::Basecamp::Ticket" do
 
   it "should be able to create a ticket" do
     @ticket = @project.ticket!(:todo_list_id => 9972756, :title => 'Ticket #12', :description => 'Body')
+    @ticket.should be_an_instance_of(@klass)
+    @ticket.project_id.should_not be_nil
+    @ticket.todo_list_id.should_not be_nil
+  end
+  
+  it "should be able to create a ticket without passing a todo list id" do
+    @ticket = @project.ticket!(:title => 'Ticket #13', :description => 'Body')
     @ticket.should be_an_instance_of(@klass)
     @ticket.project_id.should_not be_nil
     @ticket.todo_list_id.should_not be_nil
