@@ -90,16 +90,18 @@ module TicketMaster::Provider
 
       def save
         todo_item = BasecampAPI::TodoItem.find id, :params => { :todo_list_id => list.id }
-        copy_to(todo_item).save
+        copy_to(todo_item)
+        todo_item.save
       end
 
       def copy_to(todo_item)
         todo_item.completed = status
         todo_item.position = priority
-        todo_item.content = title |= description
+        todo_item.name = title
+        todo_item.content = title
+        todo_item.completed = resolution
         todo_item.responsible_party_name = assignee
         todo_item.creator_name = requestor
-        todo_item
       end
 
 
@@ -146,6 +148,15 @@ module TicketMaster::Provider
       def comment!(*options)
         options[0].merge!(:todo_item_id => id) if options.first.is_a?(Hash)
         self.class.parent::Comment.create(*options)
+      end
+
+      class Net::HTTP
+        def send(*args)
+          p "<<< Net::HTTP#send(#{args.inspect}) >>>"
+          resp = super
+          p "<<< Response = #{resp.inspect} >>>"
+          resp
+        end
       end
 
     end
