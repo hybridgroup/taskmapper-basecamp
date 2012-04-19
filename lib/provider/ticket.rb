@@ -88,12 +88,6 @@ module TicketMaster::Provider
         end
       end
 
-      def save
-        todo_item = BasecampAPI::TodoItem.find id, :params => { :todo_list_id => list.id }
-        copy_to(todo_item)
-        todo_item.save
-      end
-
       def copy_to(todo_item)
         todo_item.completed = status
         todo_item.position = priority
@@ -104,7 +98,11 @@ module TicketMaster::Provider
         todo_item.creator_name = requestor
       end
 
-
+      def save
+        todo_item = BasecampAPI::TodoItem.find id, :params => { :todo_list_id => list.id }
+        copy_to(todo_item).save
+      end
+      
       def status
         self.completed ? 'completed' : 'incomplete'
       end
