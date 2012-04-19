@@ -62,7 +62,7 @@ describe "Ticketmaster::Provider::Basecamp::Ticket" do
 
   it "should be able to update and save a ticket" do
     @ticket = @project.ticket(@ticket_id)
-    @ticket.should_not be_nil
+    @ticket.save.should be_true
   end
 
   it "should be able to create a ticket" do

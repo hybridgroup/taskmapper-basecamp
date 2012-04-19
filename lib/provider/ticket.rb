@@ -96,6 +96,7 @@ module TicketMaster::Provider
         todo_item.completed = resolution
         todo_item.responsible_party_name = assignee
         todo_item.creator_name = requestor
+        todo_item
       end
 
       def save
