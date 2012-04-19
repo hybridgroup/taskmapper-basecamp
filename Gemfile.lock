@@ -48,5 +48,5 @@ DEPENDENCIES
   rcov (~> 1.0)
   rspec (~> 2.3)
   simplecov (~> 0.5)
-  ticketmaster (= 0.7.0)
+  ticketmaster (~> 0.7.0)
   xml-simple (~> 1.1)
