@@ -191,10 +191,11 @@ class BasecampAPI
         end
       end
     end
-
-    def prefix_options
-      id ? {} : super
-    end
+    
+    # Commented because it was causing a Missing prefix error when updating a TodoItem
+    #def prefix_options
+    #  id ? {} : super
+    #end
   end
 
   class Account < Resource
