@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "ticketmaster-basecamp"
-  s.version = "0.3.9"
+  s.version = "0.4.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["HybridGroup"]
-  s.date = "2012-03-16"
+  s.date = "2012-04-20"
   s.description = "This gem provides an interface to basecamp through the ticketmaster gem"
   s.email = "hong.quach@abigfisch.com"
   s.extra_rdoc_files = [
@@ -46,12 +46,16 @@ Gem::Specification.new do |s|
     "spec/fixtures/projects/5220065.xml",
     "spec/fixtures/projects/create.json",
     "spec/fixtures/projects/create.xml",
+    "spec/fixtures/todo_items/62509330_todo_item.xml",
+    "spec/fixtures/todo_list_9972756.xml",
     "spec/fixtures/todo_lists.json",
     "spec/fixtures/todo_lists.xml",
     "spec/fixtures/todo_lists/9972756_items.json",
     "spec/fixtures/todo_lists/9972756_items.xml",
     "spec/fixtures/todo_lists/9973518_items.json",
     "spec/fixtures/todo_lists/9973518_items.xml",
+    "spec/fixtures/todo_lists/create.json",
+    "spec/fixtures/todo_lists/create.xml",
     "spec/projects_spec.rb",
     "spec/spec.opts",
     "spec/spec_helper.rb",
@@ -68,14 +72,14 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<ticketmaster>, ["= 0.6.10"])
+      s.add_runtime_dependency(%q<ticketmaster>, ["~> 0.7.0"])
       s.add_runtime_dependency(%q<xml-simple>, ["~> 1.1"])
       s.add_development_dependency(%q<rspec>, ["~> 2.3"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.6"])
       s.add_development_dependency(%q<simplecov>, ["~> 0.5"])
       s.add_development_dependency(%q<rcov>, ["~> 1.0"])
     else
-      s.add_dependency(%q<ticketmaster>, ["= 0.6.10"])
+      s.add_dependency(%q<ticketmaster>, ["~> 0.7.0"])
       s.add_dependency(%q<xml-simple>, ["~> 1.1"])
       s.add_dependency(%q<rspec>, ["~> 2.3"])
       s.add_dependency(%q<jeweler>, ["~> 1.6"])
@@ -83,7 +87,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<rcov>, ["~> 1.0"])
     end
   else
-    s.add_dependency(%q<ticketmaster>, ["= 0.6.10"])
+    s.add_dependency(%q<ticketmaster>, ["~> 0.7.0"])
     s.add_dependency(%q<xml-simple>, ["~> 1.1"])
     s.add_dependency(%q<rspec>, ["~> 2.3"])
     s.add_dependency(%q<jeweler>, ["~> 1.6"])
