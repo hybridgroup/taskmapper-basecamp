@@ -19,7 +19,7 @@ module TicketMaster::Provider
         first = options.first
         case first
           when Hash
-            super(first.to_hash.merge :todo_list_id => first["list"].id)
+            super(first.to_hash)
           else
             @system_data[:client] = first
             super(first.attributes)
@@ -65,11 +65,10 @@ module TicketMaster::Provider
           validate_ticket_hash a
           todo_item_hash = {
             :content => a[:title],
-            :position => a[:priority] ||= 1,
-            :todo_list_id => a[:todo_list_id] ||= create_todo_list({
-            :project_id => a[:project_id], 
-            :name => "#{a[:title]} list"  
-          }).id
+            :position => a[:priority] || 1,
+            :todo_list_id => a[:todo_list_id] || create_todo_list({
+                                                  :project_id => a[:project_id], 
+                                                  :name => "#{a[:title]} list"}).id
           }
         end
 
@@ -104,7 +103,7 @@ module TicketMaster::Provider
       end
       
       def todo_list_id
-        self['todo_list_id']
+        self['todo_list_id'].to_i
       end
       
       def status
