@@ -151,16 +151,6 @@ module TicketMaster::Provider
         self.class.parent::Comment.create(*options)
       end
 
-      # FIXME: Remove this debug code
-      class Net::HTTP
-        def send(*args)
-          p "<<< Net::HTTP#send(#{args.inspect}) >>>"
-          resp = super
-          p "<<< Response = #{resp.inspect} >>>"
-          resp
-        end
-      end
-
     end
   end
 end
