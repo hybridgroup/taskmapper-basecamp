@@ -2,17 +2,19 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe "Ticketmaster::Provider::Basecamp::Comment" do
   before(:each) do
-    headers = {'Authorization' => 'Basic MDAwMDAwOkJhc2VjYW1w', 'Accept' => 'application/xml'}
+    headers = {'Authorization' => 'Basic MDAwMDAwOkJhc2VjYW1w'}
+    gheaders = headers.merge 'Accept' => 'application/xml'
+    pheaders = headers.merge 'Content-Type'=>'application/xml'
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get '/projects.xml', headers, fixture_for('projects'), 200
-      mock.get '/projects/5220065.xml', headers, fixture_for('projects/5220065'), 200
-      mock.get '/projects/5220065/todo_lists.xml', headers, fixture_for('todo_lists'), 200
-      mock.get '/todo_lists/9973518/todo_items.xml', headers, fixture_for('todo_lists/9973518_items'), 200
-      mock.get '/todo_lists/9972756/todo_items.xml', headers, fixture_for('todo_lists/9972756_items'), 200
-      mock.get '/todo_items/62509330/comments.xml', headers, fixture_for('comments'), 200
-      mock.get '/todo_items/62509330/comments/74197051.xml', headers, fixture_for('comments/74197051'), 200
-      mock.get '/todo_items/62509330/comments/74197096.xml', headers, fixture_for('comments/74197096'), 200
-      mock.post '/todo_items/62509330/comments.xml', headers, fixture_for('comments/74197051'), 201
+      mock.get '/projects.xml', gheaders, fixture_for('projects'), 200
+      mock.get '/projects/5220065.xml', gheaders, fixture_for('projects/5220065'), 200
+      mock.get '/projects/5220065/todo_lists.xml', gheaders, fixture_for('todo_lists'), 200
+      mock.get '/todo_lists/9973518/todo_items.xml', gheaders, fixture_for('todo_lists/9973518_items'), 200
+      mock.get '/todo_lists/9972756/todo_items.xml', gheaders, fixture_for('todo_lists/9972756_items'), 200
+      mock.get '/todo_items/62509330/comments.xml', gheaders, fixture_for('comments'), 200
+      mock.get '/todo_items/62509330/comments/74197051.xml', gheaders, fixture_for('comments/74197051'), 200
+      mock.get '/todo_items/62509330/comments/74197096.xml', gheaders, fixture_for('comments/74197096'), 200
+      mock.post '/todo_items/62509330/comments.xml', pheaders, fixture_for('comments/74197051'), 201
     end
     @ticketmaster = TicketMaster.new(:basecamp, :domain => 'ticketmaster.basecamphq.com', :token => '000000')
     @project = @ticketmaster.projects(@project_id).first
@@ -62,6 +64,7 @@ describe "Ticketmaster::Provider::Basecamp::Comment" do
     comment = @ticket.comment!(:body => 'hello there boys and girls')
     comment.should be_an_instance_of(@klass)
     comment.body.should_not be_nil
-    commnet.id.should_not be_nil
+    comment.id.should_not be_nil
+    comment.ticket_id.should_not be_nil
   end
 end
