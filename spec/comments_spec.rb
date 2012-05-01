@@ -12,7 +12,7 @@ describe "Ticketmaster::Provider::Basecamp::Comment" do
       mock.get '/todo_items/62509330/comments.xml', headers, fixture_for('comments'), 200
       mock.get '/todo_items/62509330/comments/74197051.xml', headers, fixture_for('comments/74197051'), 200
       mock.get '/todo_items/62509330/comments/74197096.xml', headers, fixture_for('comments/74197096'), 200
-      mock.post '/todo_items/62509330/comments.xml', headers, '', 201
+      mock.post '/todo_items/62509330/comments.xml', headers, fixture_for('comments/74197051'), 201
     end
     @ticketmaster = TicketMaster.new(:basecamp, :domain => 'ticketmaster.basecamphq.com', :token => '000000')
     @project = @ticketmaster.projects(@project_id).first
@@ -59,8 +59,9 @@ describe "Ticketmaster::Provider::Basecamp::Comment" do
   end
 
   it "should be able to create a comment" do # which as mentioned before is technically a ticket update
-    pending
-    @comment = @ticket.comment!(:body => 'hello there boys and girls')
-    @comment.should be_an_instance_of(@klass)
+    comment = @ticket.comment!(:body => 'hello there boys and girls')
+    comment.should be_an_instance_of(@klass)
+    comment.body.should_not be_nil
+    commnet.id.should_not be_nil
   end
 end
