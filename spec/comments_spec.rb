@@ -67,4 +67,11 @@ describe "Ticketmaster::Provider::Basecamp::Comment" do
     comment.id.should_not be_nil
     comment.ticket_id.should_not be_nil
   end
+  
+  it "should be able to update a comment" do
+    comment = @ticket.comments.first
+    comment.body = "updated comment"
+    comment.save.should be_true
+    comment.body.should == "updated comment"
+  end
 end
