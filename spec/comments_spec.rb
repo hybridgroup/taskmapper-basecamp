@@ -15,6 +15,7 @@ describe "Ticketmaster::Provider::Basecamp::Comment" do
       mock.get '/todo_items/62509330/comments/74197051.xml', gheaders, fixture_for('comments/74197051'), 200
       mock.get '/todo_items/62509330/comments/74197096.xml', gheaders, fixture_for('comments/74197096'), 200
       mock.post '/todo_items/62509330/comments.xml', pheaders, fixture_for('comments/74197051'), 201
+      mock.put '/todo_items/62509330/comments/74197051.xml', pheaders, fixture_for('comments/74197051'), 201
     end
     @ticketmaster = TicketMaster.new(:basecamp, :domain => 'ticketmaster.basecamphq.com', :token => '000000')
     @project = @ticketmaster.projects(@project_id).first
@@ -23,6 +24,7 @@ describe "Ticketmaster::Provider::Basecamp::Comment" do
 
     @project_id = 5220065
     @ticket_id = 62509330
+    @comment_id = 74197051
   end
 
   it "should be able to load all comments" do
@@ -69,7 +71,7 @@ describe "Ticketmaster::Provider::Basecamp::Comment" do
   end
   
   it "should be able to update a comment" do
-    comment = @ticket.comments.first
+    comment = @ticket.comments @comment_id
     comment.body = "updated comment"
     comment.save.should be_true
     comment.body.should == "updated comment"

@@ -48,6 +48,12 @@ module TicketMaster::Provider
         self.new reloaded_comment.attributes.merge!(:ticket_id => ticket_id) 
       end
       
+      def save
+        bc_comment = self.class.find_bc_comment ticket_id, id
+        bc_comment.body = self.body
+        bc_comment.save
+      end
+      
       private
         def self.find_bc_comment(ticket_id, id)
           API.find id, :params => { :todo_item_id => ticket_id }
