@@ -146,9 +146,8 @@ module TicketMaster::Provider
         self.creator_name
       end
 
-      def comment!(*options)
-        options[0].merge!(:todo_item_id => id) if options.first.is_a?(Hash)
-        self.class.parent::Comment.create(*options)
+      def comment!(attributes)
+        Comment.create id, attributes
       end
 
       # FIXME: Remove this debug code

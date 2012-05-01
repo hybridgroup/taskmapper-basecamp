@@ -39,7 +39,13 @@ module TicketMaster::Provider
         comments = API.find(:all, :params => {:todo_item_id => ticket_id}).collect {|c| self.new(c.attributes.merge!(:project_id => project_id, :ticket_id => ticket_id)) }
         search_by_attribute(comments, options, limit)
       end
-
+      
+      def self.create(ticket_id, attributes)
+        new_comment = API.new attributes.merge(:todo_item_id => ticket_id)
+        new_comment.save
+        reloaded_comment = API.find new_comment.id, :params => { :todo_item_id => ticket_id }
+        self.new reloaded_comment.attributes.merge!(:ticket_id => ticket_id) 
+      end
     end
   end
 end
