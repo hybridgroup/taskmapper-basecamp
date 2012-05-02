@@ -37,12 +37,10 @@ module TicketMaster::Provider
         end
 
         def search(project_id, options = {}, limit = 1000)
-          tickets = BasecampAPI::TodoList.find(:all, :params => {:project_id => project_id}).collect do |list|
-            list.todo_items.collect { |item|
-              item.attributes['list'] = list
-              item
-            }
-          end.flatten.collect { |ticket| self.new(ticket.attributes.merge!(:project_id => project_id)) }
+          all_todo_lists = BasecampAPI::TodoListWithItems.find(:all, :params => {:responsible_party => ''})
+          project_todo_lists = all_todo_lists.select {|l| l.project_id == project_id }
+          todo_items = project_todo_lists.map { |l| l.todo_items }.flatten
+          tickets = todo_items.map {|ti| self.new ti.attributes.merge :project_id => project_id }
           search_by_attribute(tickets, options, limit)
         end
 
