@@ -16,6 +16,7 @@ describe "Ticketmaster::Provider::Basecamp::Ticket" do
       mock.put '/todo_lists/9973518/todo_items/62509330.xml', wheaders, '', 200
       mock.put '/todo_lists/0/todo_items/62509330.xml', wheaders, '', 200
       mock.post '/todo_lists/9972756/todo_items.xml', wheaders, fixture_for('todo_lists/create'), 201
+      mock.get '/todo_lists.xml?responsible_party=', {"Authorization"=>"Basic MDAwMDAwOkJhc2VjYW1w", "Accept"=>"application/xml"}, fixture_for('todo_list_with_items'), 200
     end
     @project_id = 5220065
     @ticket_id = 62509330
