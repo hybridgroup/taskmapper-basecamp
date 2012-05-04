@@ -21,22 +21,22 @@ describe "Ticketmaster::Provider::Basecamp::Project" do
 
     context "when calling #projects" do 
       subject { tm.projects }
-      specify { subject.should be_an_instance_of(Array) }
-      specify { subject.first.should be_an_instance_of(project_class) }
+      it { subject.should be_an_instance_of(Array) }
+      it { subject.first.should be_an_instance_of(project_class) }
     end
 
     context "when calling #projects using an array of id's" do 
       subject { tm.projects([project_id]) }
-      specify { subject.should be_an_instance_of(Array) }
-      specify { subject.first.should be_an_instance_of(project_class) }
-      specify { subject.first.id.should be_eql(project_id) }
+      it { subject.should be_an_instance_of(Array) }
+      it { subject.first.should be_an_instance_of(project_class) }
+      it { subject.first.id.should be_eql(project_id) }
     end
 
     context "when calling #projects with a hash of project attributes" do 
       subject { tm.projects(:id => project_id) }
-      specify { subject.should be_an_instance_of(Array) }
-      specify { subject.first.should be_an_instance_of(project_class) }
-      specify { subject.first.id.should be_eql(project_id) }
+      it { subject.should be_an_instance_of(Array) }
+      it { subject.first.should be_an_instance_of(project_class) }
+      it { subject.first.id.should be_eql(project_id) }
     end
   end
 
@@ -50,14 +50,14 @@ describe "Ticketmaster::Provider::Basecamp::Project" do
 
     context "when calling #project with an id" do 
       subject { tm.project(project_id) }
-      specify { should be_an_instance_of(project_class) }
-      specify { subject.id.should be_eql(project_id) }
+      it { should be_an_instance_of(project_class) }
+      it { subject.id.should be_eql(project_id) }
     end
 
     context "when calling #project with project attributes" do 
       subject { tm.project(:id => project_id) }
-      specify { should be_an_instance_of(project_class) } 
-      specify { subject.id.should be_eql(project_id) }
+      it { should be_an_instance_of(project_class) } 
+      it { subject.id.should be_eql(project_id) }
     end
   end
 
@@ -76,7 +76,7 @@ describe "Ticketmaster::Provider::Basecamp::Project" do
 
     context "when changing a project instance and calling #save" do 
       subject { tm.project(project_id) }
-      specify { subject.save.should be_false }
+      pending { subject.save.should be_false }
     end
   end
 

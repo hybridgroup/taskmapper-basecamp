@@ -57,7 +57,6 @@ module TicketMaster::Provider
         end
 
         private
-
         def create_todo_item_hash(ticket_hash)
           a = ticket_hash
           validate_ticket_hash a
