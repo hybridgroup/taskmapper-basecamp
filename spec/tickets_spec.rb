@@ -57,32 +57,31 @@ describe "Ticketmaster::Provider::Basecamp::Ticket" do
   end
 
   describe "Update and creation" do 
+    before(:all) do 
+      ActiveResource::HttpMock.respond_to do |mock|
+        mock.post '/todo_lists/9972756/todo_items.xml', @wheaders, '', 200
+        mock.post '/projects/5220065/todo_lists.xml', @wheaders, '', 200
+      end
+    end
+
     context "when an instance of ticket is changed and then called the save method" do 
       subject { @project.ticket(ticket_id) } 
       pending { subject.save.should be_false }
     end
-  end
 
-  it "should be able to update and save a ticket" do
-    pending
-    @ticket = @project.ticket(@ticket_id)
-    @ticket.save.should be_true
-  end
+    context "when #ticket! method is call to a project instance" do 
+      subject { @project.ticket!(:todo_list_id => 9972756, :title => 'Ticket #12', :description => 'Body') }
+      it { should be_an_instance_of(ticket_class) } 
+      it { subject.project_id.should_not be_nil }
+      it { subject.todo_list_id.should_not be_nil }
+    end
 
-  it "should be able to create a ticket" do
-    pending
-    @ticket = @project.ticket!(:todo_list_id => 9972756, :title => 'Ticket #12', :description => 'Body')
-    @ticket.should be_an_instance_of(@klass)
-    @ticket.project_id.should_not be_nil
-    @ticket.todo_list_id.should_not be_nil
-  end
-
-  it "should be able to create a ticket without passing a todo list id" do
-    pending
-    @ticket = @project.ticket!(:title => 'Ticket #13', :description => 'Body')
-    @ticket.should be_an_instance_of(@klass)
-    @ticket.project_id.should_not be_nil
-    @ticket.todo_list_id.should_not be_nil
+    context "when #ticket! method is call without a todo_list_id" do 
+      subject { @project.ticket!(:title => 'Ticket #13', :description => 'Body') }
+      pending { should be_an_instance_of(ticket_class) }
+      pending { subject.project_id.should_not be_nil }
+      pending { subject.todo_list_id.should_not be_nil }
+    end
   end
 
 end

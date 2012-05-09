@@ -18,11 +18,11 @@ module TicketMaster::Provider
         @cache ||= {}
         first = options.first
         case first
-          when Hash
-            super(first.to_hash)
-          else
-            @system_data[:client] = first
-            super(first.attributes)
+        when Hash
+          super(first.to_hash)
+        else
+          @system_data[:client] = first
+          super(first.attributes)
         end
       end
 
@@ -64,8 +64,8 @@ module TicketMaster::Provider
             :content => a[:title],
             :position => a[:priority] || 1,
             :todo_list_id => a[:todo_list_id] || create_todo_list({
-                                                  :project_id => a[:project_id], 
-                                                  :name => "#{a[:title]} list"}).id
+            :project_id => a[:project_id], 
+            :name => "#{a[:title]} list"}).id
           }
         end
 
@@ -98,11 +98,11 @@ module TicketMaster::Provider
         todo_item = BasecampAPI::TodoItem.find id, :params => { :todo_list_id => todo_list_id }
         copy_to(todo_item).save
       end
-      
+
       def todo_list_id
         self['todo_list_id'].to_i
       end
-      
+
       def status
         self.completed ? 'completed' : 'incomplete'
       end
