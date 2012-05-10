@@ -4,13 +4,13 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = "ticketmaster-basecamp"
+  s.name = "taskmapper-basecamp"
   s.version = "0.4.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["HybridGroup"]
   s.date = "2012-04-20"
-  s.description = "This gem provides an interface to basecamp through the ticketmaster gem"
+  s.description = "This gem provides an interface to basecamp through the taskmapper gem"
   s.email = "hong.quach@abigfisch.com"
   s.extra_rdoc_files = [
     "LICENSE",
@@ -30,7 +30,7 @@ Gem::Specification.new do |s|
     "lib/provider/comment.rb",
     "lib/provider/project.rb",
     "lib/provider/ticket.rb",
-    "lib/ticketmaster-basecamp.rb",
+    "lib/taskmapper-basecamp.rb",
     "spec/comments_spec.rb",
     "spec/fixtures/comments.json",
     "spec/fixtures/comments.xml",
@@ -59,27 +59,27 @@ Gem::Specification.new do |s|
     "spec/projects_spec.rb",
     "spec/spec.opts",
     "spec/spec_helper.rb",
-    "spec/ticketmaster-basecamp_spec.rb",
+    "spec/taskmapper-basecamp_spec.rb",
     "spec/tickets_spec.rb",
-    "ticketmaster-basecamp.gemspec"
+    "taskmapper-basecamp.gemspec"
   ]
-  s.homepage = "http://github.com/kiafaldorius/ticketmaster-basecamp"
+  s.homepage = "http://github.com/kiafaldorius/taskmapper-basecamp"
   s.require_paths = ["lib"]
   s.rubygems_version = "1.8.17"
-  s.summary = "The basecamp provider for ticketmaster"
+  s.summary = "The basecamp provider for taskmapper"
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<ticketmaster>, ["~> 0.7.0"])
+      s.add_runtime_dependency(%q<taskmapper>, ["~> 0.7.0"])
       s.add_runtime_dependency(%q<xml-simple>, ["~> 1.1"])
       s.add_development_dependency(%q<rspec>, ["~> 2.3"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.6"])
       s.add_development_dependency(%q<simplecov>, ["~> 0.5"])
       s.add_development_dependency(%q<rcov>, ["~> 1.0"])
     else
-      s.add_dependency(%q<ticketmaster>, ["~> 0.7.0"])
+      s.add_dependency(%q<taskmapper>, ["~> 0.7.0"])
       s.add_dependency(%q<xml-simple>, ["~> 1.1"])
       s.add_dependency(%q<rspec>, ["~> 2.3"])
       s.add_dependency(%q<jeweler>, ["~> 1.6"])
@@ -87,7 +87,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<rcov>, ["~> 1.0"])
     end
   else
-    s.add_dependency(%q<ticketmaster>, ["~> 0.7.0"])
+    s.add_dependency(%q<taskmapper>, ["~> 0.7.0"])
     s.add_dependency(%q<xml-simple>, ["~> 1.1"])
     s.add_dependency(%q<rspec>, ["~> 2.3"])
     s.add_dependency(%q<jeweler>, ["~> 1.6"])

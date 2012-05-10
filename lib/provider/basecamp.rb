@@ -1,16 +1,16 @@
-module TicketMaster::Provider
-  # This is the Basecamp Provider for ticketmaster
+module TaskMapper::Provider
+  # This is the Basecamp Provider for taskmapper
   module Basecamp
-    include TicketMaster::Provider::Base
+    include TaskMapper::Provider::Base
     
-    # This is for cases when you want to instantiate using TicketMaster::Provider::Basecamp.new(auth)
+    # This is for cases when you want to instantiate using TaskMapper::Provider::Basecamp.new(auth)
     def self.new(auth = {})
-      TicketMaster.new(:basecamp, auth)
+      TaskMapper.new(:basecamp, auth)
     end
     
     def authorize(auth = {})
       auth[:ssl] = true
-      @authentication ||= TicketMaster::Authenticator.new(auth)
+      @authentication ||= TaskMapper::Authenticator.new(auth)
       auth = @authentication
       if (auth.domain.nil? and auth.subdomain.nil?) or (auth.token.nil? and (auth.username.nil? and auth.password.nil?))
         raise "Please provide at least an domain and token or username and password)"

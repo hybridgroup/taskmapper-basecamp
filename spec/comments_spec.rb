@@ -1,10 +1,10 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-describe "Ticketmaster::Provider::Basecamp::Comment" do
+describe TaskMapper::Provider::Basecamp::Comment do
   let(:project_id) { 5220065 }
   let(:ticket_id) {133184178 }
-  let(:tm) { TicketMaster.new(:basecamp, :domain => 'ticketmaster.basecamphq.com', :token => '000000') }
-  let(:comment_class) { TicketMaster::Provider::Basecamp::Comment }
+  let(:tm) { TaskMapper.new(:basecamp, :domain => 'ticketmaster.basecamphq.com', :token => '000000') }
+  let(:comment_class) { TaskMapper::Provider::Basecamp::Comment }
   let(:comment_id) { 74197051 }
 
   before(:each) do

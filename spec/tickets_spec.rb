@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-describe "Ticketmaster::Provider::Basecamp::Ticket" do
+describe TaskMapper::Provider::Basecamp::Ticket do
   let(:project_id) { 5220065 }
   before(:all) do
     @headers = {'Authorization' => 'Basic MDAwMDAwOkJhc2VjYW1w'}
@@ -11,8 +11,8 @@ describe "Ticketmaster::Provider::Basecamp::Ticket" do
     @project = tm.project(project_id)
   end
   let(:ticket_id) { 133184178 }
-  let(:tm) { TicketMaster.new(:basecamp, :domain => 'ticketmaster.basecamphq.com', :token => '000000') }
-  let(:ticket_class) { TicketMaster::Provider::Basecamp::Ticket }
+  let(:tm) { TaskMapper.new(:basecamp, :domain => 'ticketmaster.basecamphq.com', :token => '000000') }
+  let(:ticket_class) { TaskMapper::Provider::Basecamp::Ticket }
 
   describe "Retrieve tickets" do 
     before(:each) do 

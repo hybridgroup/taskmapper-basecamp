@@ -1,14 +1,14 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-describe "Ticketmaster::Provider::Basecamp::Project" do
+describe TaskMapper::Provider::Basecamp::Project do
 
   before(:all) do 
     @headers =  {'Authorization' => 'Basic MDAwMDAwOkJhc2VjYW1w'}
     @wheaders = @headers.merge('Content-Type' => 'application/xml') 
   end
 
-  let(:tm) { TicketMaster.new(:basecamp, :token => '000000', :domain => 'ticketmaster.basecamphq.com') }
-  let(:project_class) { TicketMaster::Provider::Basecamp::Project }
+  let(:tm) { TaskMapper.new(:basecamp, :token => '000000', :domain => 'ticketmaster.basecamphq.com') }
+  let(:project_class) { TaskMapper::Provider::Basecamp::Project }
   let(:project_id) { 5220065 }
 
   describe "Retrieving projects" do 

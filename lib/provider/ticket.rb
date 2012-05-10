@@ -1,6 +1,6 @@
-module TicketMaster::Provider
+module TaskMapper::Provider
   module Basecamp
-    # Ticket class for ticketmaster-basecamp
+    # Ticket class for taskmapper-basecamp
     #
     #
     # * status => completed (either completed or incomplete)
@@ -12,7 +12,7 @@ module TicketMaster::Provider
     # * assignee => responsible_party_name (read-only)
     # * requestor => creator_name (read-only)
     # * project_id
-    class Ticket < TicketMaster::Provider::Base::Ticket
+    class Ticket < TaskMapper::Provider::Base::Ticket
       def initialize(*options)
         @system_data ||= {}
         @cache ||= {}

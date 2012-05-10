@@ -1,13 +1,13 @@
-module TicketMaster::Provider
+module TaskMapper::Provider
   module Basecamp
-    # Project class for ticketmaster-basecamp
+    # Project class for taskampper-basecamp
     #
     # Remaps 
     #
     # description => announcement
     # created_at => created_on
     # updated_at => last_changed_on
-    class Project < TicketMaster::Provider::Base::Project
+    class Project < TaskMapper::Provider::Base::Project
       API = BasecampAPI::Project
 
       def initialize(*object) 
