@@ -1,66 +1,103 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe "Ticketmaster::Provider::Basecamp::Comment" do
+  let(:project_id) { 5220065 }
+  let(:ticket_id) {133184178 }
+  let(:tm) { TicketMaster.new(:basecamp, :domain => 'ticketmaster.basecamphq.com', :token => '000000') }
+  let(:comment_class) { TicketMaster::Provider::Basecamp::Comment }
+  let(:comment_id) { 74197051 }
+
   before(:each) do
-    headers = {'Authorization' => 'Basic MDAwMDAwOkJhc2VjYW1w', 'Accept' => 'application/xml'}
+    @headers = {'Authorization' => 'Basic MDAwMDAwOkJhc2VjYW1w'}
+    gheaders = @headers.merge 'Accept' => 'application/xml'
+    
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get '/projects.xml', headers, fixture_for('projects'), 200
-      mock.get '/projects/5220065.xml', headers, fixture_for('projects/5220065'), 200
-      mock.get '/projects/5220065/todo_lists.xml', headers, fixture_for('todo_lists'), 200
-      mock.get '/todo_lists/9973518/todo_items.xml', headers, fixture_for('todo_lists/9973518_items'), 200
-      mock.get '/todo_lists/9972756/todo_items.xml', headers, fixture_for('todo_lists/9972756_items'), 200
-      mock.get '/todo_items/62509330/comments.xml', headers, fixture_for('comments'), 200
-      mock.get '/todo_items/62509330/comments/74197051.xml', headers, fixture_for('comments/74197051'), 200
-      mock.get '/todo_items/62509330/comments/74197096.xml', headers, fixture_for('comments/74197096'), 200
-      mock.post '/todo_items/62509330/comments.xml', headers, '', 201
+      mock.get '/projects/5220065.xml', @headers, fixture_for('projects/5220065'), 200
+      mock.get '/todo_lists.xml?responsible_party=', @headers, fixture_for('todo_list_with_items'), 200
     end
-    @ticketmaster = TicketMaster.new(:basecamp, :domain => 'ticketmaster.basecamphq.com', :token => '000000')
-    @project = @ticketmaster.projects(@project_id).first
-    @ticket = @project.tickets(@ticket_id).first
-    @klass = TicketMaster::Provider::Basecamp::Comment
-
-    @project_id = 5220065
-    @ticket_id = 62509330
+    @project = tm.project(project_id)
+    @ticket = @project.ticket(ticket_id)
   end
 
-  it "should be able to load all comments" do
-    @comments = @ticket.comments
-    @comments.should be_an_instance_of(Array)
-    @comments.first.should be_an_instance_of(@klass)
+  describe "Retrieving comments" do 
+    before(:each) do 
+      ActiveResource::HttpMock.respond_to do |mock|
+        mock.get '/todo_items/133184178/comments.xml', @headers, fixture_for('comments'), 200
+        mock.get '/todo_items/133184178/comments/74197051.xml', @headers, fixture_for('comments/74197051'), 200
+        mock.get '/todo_items/133184178/comments/74197096.xml', @headers, fixture_for('comments/74197096'), 200
+      end
+    end
+
+    context "when #comments is call to a ticket instance" do 
+      subject { @ticket.comments } 
+      it { should be_an_instance_of(Array) }    
+      it { subject.first.should be_an_instance_of(comment_class) }
+    end
+
+    context "when #comments is call to a ticket instance with an array of id's as parameters" do 
+      subject { @ticket.comments([74197051, 74197096]) }
+      it { should be_an_instance_of(Array) }
+      it { subject.first.should be_an_instance_of(comment_class) }
+      it { subject.first.id.should be_eql(74197051) }
+      it { subject.last.id.should be_eql(74197096) }
+    end
+
+    context "when #comments is call to a ticket instance with comments attributes as parameters" do 
+      subject { @ticket.comments(:id => comment_id) }
+      it { should be_an_instance_of(Array) }
+      it { subject.first.should be_an_instance_of(comment_class) }
+      it { subject.first.id.should be_eql(comment_id) }
+    end
   end
 
-  it "should be able to load all comments based on 'id's" do # lighthouse comments don't have ids, so we're faking them
-    @comments = @ticket.comments([74197051, 74197096])
-    @comments.should be_an_instance_of(Array)
-    @comments.first.id.should == 74197051
-    @comments.last.id.should == 74197096
-    @comments[1].should be_an_instance_of(@klass)
+  describe "Retrieve a single comment from a ticket" do 
+    before(:each) do 
+      ActiveResource::HttpMock.respond_to do |mock|
+        mock.get '/todo_items/133184178/comments.xml', @headers, fixture_for('comments'), 200
+        mock.get '/todo_items/133184178/comments/74197051.xml', @headers, fixture_for('comments/74197051'), 200
+      end
+    end
+
+    context "when #comment is call with a comment id" do 
+      subject { @ticket.comment(comment_id) }
+      it { should be_an_instance_of(comment_class) }
+      it { subject.id.should be_eql(comment_id) }
+    end
+
+    context "when #comment is call with an attribute" do 
+      subject { @ticket.comment(:id => comment_id) }
+      it { should be_an_instance_of(comment_class) }
+      it { subject.id.should be_eql(comment_id) }
+    end
   end
 
-  it "should be able to load all comments based on attributes" do
-    @comments = @ticket.comments(:commentable_id => @ticket.id)
-    @comments.should be_an_instance_of(Array)
-    @comments.first.should be_an_instance_of(@klass)
+  describe "Create and update a comment for a ticket" do 
+    before(:each) do 
+      pheaders = @headers.merge 'Content-Type'=>'application/xml'
+      ActiveResource::HttpMock.respond_to do |mock|
+        mock.get '/todo_items/133184178/comments/74197051.xml', @headers, fixture_for('comments/74197051'), 200
+        mock.get '/todo_items/133184178/comments.xml', @headers, fixture_for('comments'), 200
+        mock.put '/todo_items/133184178/comments/74197051.xml', @headers, '', 200
+        mock.post '/todo_items/133184178/comments.xml', pheaders, fixture_for('comments/74197051'), 200
+      end
+    end
+
+    context "when a comment is changed and then called the #save on it" do 
+      it do 
+        comment = @ticket.comment(comment_id) 
+        comment.body = "updated comment"
+        comment.save.should be_true
+        comment.body.should be_eql("updated comment")
+      end
+    end
+
+    context "when #comment! is call" do 
+      subject { @ticket.comment!(:body => 'hello there boys and girls') }
+      it { should be_an_instance_of(comment_class) }
+      it { subject.body.should_not be_nil }
+      it { subject.id.should_not be_nil }
+      it { subject.ticket_id.should_not be_nil }
+    end
   end
 
-  it "should be able to load a comment based on id" do
-    @comment = @ticket.comment(74197051)
-    @comment.should be_an_instance_of(@klass)
-    @comment.id.should == 74197051
-  end
-
-  it "should be able to load a comment based on attributes" do
-    @comment = @ticket.comment(:commentable_id => @ticket.id)
-    @comment.should be_an_instance_of(@klass)
-  end
-
-  it "should return the class" do
-    @ticket.comment.should == @klass
-  end
-
-  it "should be able to create a comment" do # which as mentioned before is technically a ticket update
-    pending
-    @comment = @ticket.comment!(:body => 'hello there boys and girls')
-    @comment.should be_an_instance_of(@klass)
-  end
 end

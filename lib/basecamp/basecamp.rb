@@ -314,6 +314,14 @@ class BasecampAPI
       @todo_items ||= TodoItem.find(:all, :params => options.merge(:todo_list_id => id))
     end
   end
+  
+  # This resource is to address GET /todo_lists.xml?responsible_party=#{id}
+  # To retrieve Todo lists with items inside in one request
+  class TodoListWithItems < Resource
+    def self.element_name
+      "todo_lists"
+    end
+  end
 
   class TodoItem < Resource
     parent_resources :todo_list

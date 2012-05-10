@@ -1,84 +1,87 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe "Ticketmaster::Provider::Basecamp::Ticket" do
+  let(:project_id) { 5220065 }
   before(:all) do
-    headers = {'Authorization' => 'Basic MDAwMDAwOkJhc2VjYW1w'}
-    wheaders = headers.merge('Content-Type' => 'application/xml')
+    @headers = {'Authorization' => 'Basic MDAwMDAwOkJhc2VjYW1w'}
+    @wheaders = @headers.merge('Content-Type' => 'application/xml')
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get '/projects/5220065.xml', headers, fixture_for('projects/5220065'), 200
-      mock.get '/projects/5220065/todo_lists.xml', headers, fixture_for('todo_lists'), 200
-      mock.get '/todo_lists/9973518/todo_items.xml', headers, fixture_for('todo_lists/9973518_items'), 200
-      mock.get '/todo_lists/9972756/todo_items.xml', headers, fixture_for('todo_lists/9972756_items'), 200
-      mock.get '/todo_lists/9973518/todo_items/62509330.xml', headers, fixture_for('todo_items/62509330_todo_item'), 200
-      mock.get '/todo_lists/0/todo_items/62509330.xml', headers, fixture_for('todo_items/62509330_todo_item'), 200
-      mock.put '/todo_items/62509330.xml', wheaders, '', 200
-      mock.post '/projects/5220065/todo_lists.xml', wheaders, fixture_for('todo_list_9972756'), 201
-      mock.put '/todo_lists/9973518/todo_items/62509330.xml', wheaders, '', 200
-      mock.put '/todo_lists/0/todo_items/62509330.xml', wheaders, '', 200
-      mock.post '/todo_lists/9972756/todo_items.xml', wheaders, fixture_for('todo_lists/create'), 201
+      mock.get '/projects/5220065.xml', @headers, fixture_for('projects/5220065'), 200
     end
-    @project_id = 5220065
-    @ticket_id = 62509330
+    @project = tm.project(project_id)
+  end
+  let(:ticket_id) { 133184178 }
+  let(:tm) { TicketMaster.new(:basecamp, :domain => 'ticketmaster.basecamphq.com', :token => '000000') }
+  let(:ticket_class) { TicketMaster::Provider::Basecamp::Ticket }
+
+  describe "Retrieve tickets" do 
+    before(:each) do 
+      ActiveResource::HttpMock.respond_to do |mock|
+        mock.get '/todo_lists.xml?responsible_party=', @headers, fixture_for('todo_list_with_items'), 200
+      end
+    end
+
+    context "when #tickets is call for a project instance" do 
+      subject { @project.tickets }
+      it { should be_an_instance_of(Array) }
+      it { subject.first.should be_an_instance_of(ticket_class) }
+    end
+
+    context "when #tickets is call to a project instance with an array of id's" do 
+      subject { @project.tickets([ticket_id]) }
+      it { should be_an_instance_of(Array) } 
+      it { subject.first.should be_an_instance_of(ticket_class) }
+      it { subject.first.id.should be_eql(ticket_id) }
+    end
+
+    context "when #tickets is call to a project instance with attributes" do 
+      subject { @project.tickets(:id => ticket_id) }
+      it { should be_an_instance_of(Array) }
+      it { subject.first.should be_an_instance_of(ticket_class) }
+      it { subject.first.id.should be_eql(ticket_id) }
+    end
   end
 
-  before(:each) do
-    @ticketmaster = TicketMaster.new(:basecamp, :domain => 'ticketmaster.basecamphq.com', :token => '000000')
-    @project = @ticketmaster.project(@project_id)
-    @klass = TicketMaster::Provider::Basecamp::Ticket
+  describe "Retrieve a single ticket" do 
+    context "when #ticket is call to a project instance with an ticket id" do 
+      subject { @project.ticket(ticket_id) }
+      it { should be_an_instance_of(ticket_class) }
+      it { subject.id.should be_eql(ticket_id) } 
+    end
+
+    context "when #ticket is call to a project instance with ticket attributes" do 
+      subject { @project.ticket(:id => ticket_id) }
+      it { should be_an_instance_of(ticket_class) }
+      it { subject.id.should be_eql(ticket_id) }
+    end
   end
 
-  it "should be able to load all tickets" do
-    @project.tickets.should be_an_instance_of(Array)
-    @project.tickets.first.should be_an_instance_of(@klass)
-  end
+  describe "Update and creation" do 
+    before(:all) do 
+      ActiveResource::HttpMock.respond_to do |mock|
+        mock.post '/todo_lists/9972756/todo_items.xml', @wheaders, '', 200
+        mock.post '/projects/5220065/todo_lists.xml', @wheaders, '', 200
+      end
+    end
 
-  it "should be able to load all tickets based on an array of ids" do
-    @tickets = @project.tickets([@ticket_id])
-    @tickets.should be_an_instance_of(Array)
-    @tickets.first.should be_an_instance_of(@klass)
-    @tickets.first.id.should == @ticket_id
-  end
+    context "when an instance of ticket is changed and then called the save method" do 
+      subject { @project.ticket(ticket_id) } 
+      pending { subject.save.should be_false }
+    end
 
-  it "should be able to load all tickets based on attributes" do
-    @tickets = @project.tickets(:id => @ticket_id)
-    @tickets.should be_an_instance_of(Array)
-    @tickets.first.should be_an_instance_of(@klass)
-    @tickets.first.id.should == @ticket_id
-  end
+    context "when #ticket! method is call to a project instance" do 
+      subject { @project.ticket!(:todo_list_id => 9972756, :title => 'Ticket #12', :description => 'Body') }
+      it { should be_an_instance_of(ticket_class) } 
+      it { subject.project_id.should_not be_nil }
+      it { subject.todo_list_id.should_not be_nil }
+    end
 
-  it "should return the ticket class" do
-    @project.ticket.should == @klass
-  end
-
-  it "should be able to load a single ticket" do
-    @ticket = @project.ticket(@ticket_id)
-    @ticket.should be_an_instance_of(@klass)
-    @ticket.id.should == @ticket_id
-  end
-
-  it "should be able to load a single ticket based on attributes" do
-    @ticket = @project.ticket(:id => @ticket_id)
-    @ticket.should be_an_instance_of(@klass)
-    @ticket.id.should == @ticket_id
-  end
-
-  it "should be able to update and save a ticket" do
-    @ticket = @project.ticket(@ticket_id)
-    @ticket.save.should be_true
-  end
-
-  it "should be able to create a ticket" do
-    @ticket = @project.ticket!(:todo_list_id => 9972756, :title => 'Ticket #12', :description => 'Body')
-    @ticket.should be_an_instance_of(@klass)
-    @ticket.project_id.should_not be_nil
-    @ticket.todo_list_id.should_not be_nil
-  end
-
-  it "should be able to create a ticket without passing a todo list id" do
-    @ticket = @project.ticket!(:title => 'Ticket #13', :description => 'Body')
-    @ticket.should be_an_instance_of(@klass)
-    @ticket.project_id.should_not be_nil
-    @ticket.todo_list_id.should_not be_nil
+    context "when #ticket! method is call without a todo_list_id" do 
+      subject { @project.ticket!(:title => 'Ticket #13', :description => 'Body') }
+      pending { should be_an_instance_of(ticket_class) }
+      pending { subject.project_id.should_not be_nil }
+      pending { subject.todo_list_id.should_not be_nil }
+    end
   end
 
 end

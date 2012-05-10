@@ -18,11 +18,11 @@ module TicketMaster::Provider
         @cache ||= {}
         first = options.first
         case first
-          when Hash
-            super(first.to_hash)
-          else
-            @system_data[:client] = first
-            super(first.attributes)
+        when Hash
+          super(first.to_hash)
+        else
+          @system_data[:client] = first
+          super(first.attributes)
         end
       end
 
@@ -37,12 +37,7 @@ module TicketMaster::Provider
         end
 
         def search(project_id, options = {}, limit = 1000)
-          tickets = BasecampAPI::TodoList.find(:all, :params => {:project_id => project_id}).collect do |list|
-            list.todo_items.collect { |item|
-              item.attributes['list'] = list
-              item
-            }
-          end.flatten.collect { |ticket| self.new(ticket.attributes.merge!(:project_id => project_id)) }
+          tickets = todo_items(project_id).map {|ti| self.new ti.attributes.merge :project_id => project_id }
           search_by_attribute(tickets, options, limit)
         end
 
@@ -59,6 +54,18 @@ module TicketMaster::Provider
         end
 
         private
+        def all_todo_lists
+          BasecampAPI::TodoListWithItems.find(:all, :params => {:responsible_party => ''})
+        end
+
+        def project_todo_lists(project_id)
+          all_todo_lists.select {|l| l.project_id == project_id }
+        end
+
+        def todo_items(project_id)
+          project_todo_lists(project_id).map { |l| l.todo_items }.flatten
+        end
+
 
         def create_todo_item_hash(ticket_hash)
           a = ticket_hash
@@ -67,8 +74,8 @@ module TicketMaster::Provider
             :content => a[:title],
             :position => a[:priority] || 1,
             :todo_list_id => a[:todo_list_id] || create_todo_list({
-                                                  :project_id => a[:project_id], 
-                                                  :name => "#{a[:title]} list"}).id
+            :project_id => a[:project_id], 
+            :name => "#{a[:title]} list"}).id
           }
         end
 
@@ -101,11 +108,11 @@ module TicketMaster::Provider
         todo_item = BasecampAPI::TodoItem.find id, :params => { :todo_list_id => todo_list_id }
         copy_to(todo_item).save
       end
-      
+
       def todo_list_id
         self['todo_list_id'].to_i
       end
-      
+
       def status
         self.completed ? 'completed' : 'incomplete'
       end
@@ -146,9 +153,8 @@ module TicketMaster::Provider
         self.creator_name
       end
 
-      def comment!(*options)
-        options[0].merge!(:todo_item_id => id) if options.first.is_a?(Hash)
-        self.class.parent::Comment.create(*options)
+      def comment!(attributes)
+        Comment.create id, attributes
       end
 
     end
