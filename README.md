@@ -1,6 +1,6 @@
-# ticketmaster-basecamp
+# taskmapper-basecamp
 
-This is the provider for interaction with [basecamp](http://www.basecamphq.com) using [ticketmaster](http://ticketrb.com)
+This is the provider for interaction with [basecamp](http://www.basecamphq.com) using [taskmapper](http://ticketrb.com)
 
 # Basecamp Setup
 
@@ -18,10 +18,10 @@ At the bottom of that page is the "Authentication tokens" section. Click on the 
 
 # Usage
 
-Initialize the basecamp ticketmaster instance using a token or username and password:
+Initialize the basecamp taskmapper instance using a token or username and password:
 
-    basecamp = TicketMaster.new(:basecamp, :domain => 'yourdomain.basecamphq.com', :token => 'abc000...')
-    basecamp = TicketMaster.new(:basecamp, :domain => 'yourdomain.basecamphq.com', :username => 'you', :password => 'pass')
+    basecamp = taskmapper.new(:basecamp, :domain => 'yourdomain.basecamphq.com', :token => 'abc000...')
+    basecamp = taskmapper.new(:basecamp, :domain => 'yourdomain.basecamphq.com', :username => 'you', :password => 'pass')
 
 ## Find projects
 
@@ -30,7 +30,7 @@ Initialize the basecamp ticketmaster instance using a token or username and pass
 
 ## Find tickets
 
-Since basecamp does not have the conventional "tickets", ticketmaster-basecamp considers a TodoItem as a ticket, but will prepend the TodoList's title to the TodoItem's title.
+Since basecamp does not have the conventional "tickets", taskmapper-basecamp considers a TodoItem as a ticket, but will prepend the TodoList's title to the TodoItem's title.
     tickets = project.tickets
     ticket = project.ticket(<todoitem_id>)
 
@@ -40,13 +40,13 @@ Since basecamp does not have the conventional "tickets", ticketmaster-basecamp c
 
 ## More
 
-For more usage information, see [ticketmaster](http://github.com/hybridgroup/ticketmaster). This provider should implement all the ticketmaster functionality. If it does not, please notify us.
+For more usage information, see [taskmapper](http://github.com/hybridgroup/taskmapper). This provider should implement all the taskmapper functionality. If it does not, please notify us.
 
 ## Contributions
 
 * [Kir Shatrov](https://github.com/kirs) ([Evrone company](https://github.com/organizations/evrone))
 
-Thanks for using ticketmaster!
+Thanks for using taskmapper!
 
 ### Note on Patches/Pull Requests
  
