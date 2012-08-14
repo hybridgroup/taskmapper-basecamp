@@ -17,31 +17,37 @@ describe TaskMapper::Provider::Basecamp::Project do
         mock.get '/projects/5220065.xml', headers, fixture_for('projects/5220065'), 200
       end
     end
-    let(:projects) { tm.projects } 
-
     describe :projects do 
+      let(:projects) { tm.projects }
       subject { projects }
-      it { should be_an_instance_of(Array) }
 
+      it { should be_an_instance_of(Array) }
       describe :first do 
         subject { projects.first } 
         it { should be_an_instance_of(project_class) }
       end
 
     end
+
     describe "#projects with array of id's" do 
-      subject { projects [project_id] }
+      let(:projects) { tm.projects [project_id] }
+      subject { projects }
+
       it { should be_an_instance_of Array }
       describe :first do 
+        subject { projects.first }
         it { should be_an_instance_of project_class }
         its(:id) { should be_eql project_id }
       end
     end
 
     describe "#projects with a hash of project attributes" do 
-      subject { projects(:id => project_id) }
+      let(:projects) { tm.projects :id => project_id }
+      subject { projects } 
+
       it { should be_an_instance_of(Array) }
       describe :first do 
+        subject { projects.first }
         it { should be_an_instance_of(project_class) }
         its(:id) { should be_eql(project_id) }
       end
@@ -57,8 +63,8 @@ describe TaskMapper::Provider::Basecamp::Project do
   describe "Creation and update" do 
     before(:each) do 
       ActiveResource::HttpMock.respond_to do |mock| 
-        mock.post '/projects.xml', @wheadesr, '', 200
-        mock.get '/projects/5220065.xml', @headers, fixture_for('projects/5220065'), 200
+        mock.post '/projects.xml', wheaders, '', 200
+        mock.get '/projects/5220065.xml', headers, fixture_for('projects/5220065'), 200
       end
     end
 
