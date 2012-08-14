@@ -12,11 +12,9 @@ tmtags
 
 ## VIM
 *.swp
+*.un~
 
 ## PROJECT::GENERAL
 coverage
 rdoc
 pkg
-
-## PROJECT::SPECIFIC
-.rvmrc
