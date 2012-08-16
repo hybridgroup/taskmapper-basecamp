@@ -121,6 +121,10 @@ module TaskMapper::Provider
         self.position
       end
 
+      def resolution
+        self.completed ? self.completed : 'In Progress'
+      end
+
       def priority=(pri)
         self.position = pri
       end
@@ -146,7 +150,7 @@ module TaskMapper::Provider
       end
 
       def assignee
-        self.responsible_party_name
+        self.responsible_party_name ? self.responsible_party_name : 'Unassigned'
       end
 
       def requestor
