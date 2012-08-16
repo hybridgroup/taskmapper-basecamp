@@ -10,59 +10,42 @@ module TaskMapper::Provider
     class Project < TaskMapper::Provider::Base::Project
       API = BasecampAPI::Project
 
-      def initialize(*object) 
-        if object.first 
-          object = object.first
-          unless object.is_a? Hash
-            hash = {:id => object.id,
-                    :created_at => created_on,
-                    :updated_at => updated_on,
-                    :description => object.announcement,
-                    :name => object.name}
-
-          else
-            hash = object
-          end
-          super hash
+      def initialize(*backend_info) 
+        @system_data ||= {}
+        data = backend_info.first
+        case data 
+        when Hash
+          super data.to_hash
+        else
+          @system_data[:client] = data
+          super data.attributes
         end
       end
-      
+
       def description
         announcement
       end
-      
+
       def description=(desc)
         announcement = desc
       end
-      
+
       def created_at
-        begin
-          created_on.to_time
-        rescue
-          created_on
-        end
+        created_on.to_time
+      rescue
+        created_on
       end
-      
-      def created_at=(created)
-        created_on = created
-      end
-      
+
       def updated_at
-        begin
-          last_changed_on.to_time
-        rescue
-          last_changed_on
-        end
+        last_changed_on.to_time
+      rescue
+        last_changed_on
       end
-      
-      def updated_at=(updated)
-        last_changed_on = updated
-      end
-      
+
       def ticket!(attributes_hash)
         provider_parent(self.class)::Ticket.create attributes_hash.merge :project_id => id
       end
-      
+
       def self.find_by_id(id)
         self.new API.find(id)
       end
@@ -75,7 +58,7 @@ module TaskMapper::Provider
         projects = API.find(:all).collect { |project| self.new project }
         search_by_attribute(projects, options, limit)
       end
-      
+
       # copy from this.copy(that) copies that into this
       def copy(project)
         project.tickets.each do |ticket|

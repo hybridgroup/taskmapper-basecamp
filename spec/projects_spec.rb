@@ -14,7 +14,6 @@ describe TaskMapper::Provider::Basecamp::Project do
         mock.get '/projects.xml', headers, fixture_for('projects'), 200
         mock.get '/projects/5220065.xml', headers, fixture_for('projects/5220065'), 200
         mock.get '/projects.xml', headers, fixture_for('projects'), 200
-        mock.get '/projects/5220065.xml', headers, fixture_for('projects/5220065'), 200
       end
     end
     describe :projects do 
@@ -57,6 +56,9 @@ describe TaskMapper::Provider::Basecamp::Project do
       subject { tm.project project_id }
       it { should be_an_instance_of project_class }
       its(:id) { should be_eql project_id }
+      its(:name) { should == 'Ticketmaster-basecamp' }
+      its(:created_at) { should be_an_instance_of Time }
+      its(:updated_at) { should be_an_instance_of Time }
     end
   end
 
