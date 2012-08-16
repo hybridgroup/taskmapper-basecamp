@@ -57,6 +57,7 @@ describe TaskMapper::Provider::Basecamp::Project do
       it { should be_an_instance_of project_class }
       its(:id) { should be_eql project_id }
       its(:name) { should == 'Ticketmaster-basecamp' }
+      its(:description) { should == 'Announcement.' }
       its(:created_at) { should be_an_instance_of Time }
       its(:updated_at) { should be_an_instance_of Time }
     end

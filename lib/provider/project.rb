@@ -26,10 +26,6 @@ module TaskMapper::Provider
         announcement
       end
 
-      def description=(desc)
-        announcement = desc
-      end
-
       def created_at
         created_on.to_time
       rescue
