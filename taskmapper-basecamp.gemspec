@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "taskmapper-basecamp"
-  s.version = "0.6.2"
+  s.version = "0.6.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["HybridGroup"]
-  s.date = "2012-08-21"
+  s.date = "2013-01-03"
   s.description = "This gem provides an interface to basecamp through the taskmapper gem"
   s.email = "hong.quach@abigfisch.com"
   s.extra_rdoc_files = [
