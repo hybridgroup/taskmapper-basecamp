@@ -51,8 +51,11 @@ module TaskMapper::Provider
       end
 
       def self.search(options = {}, limit = 1000)
-        projects = API.find(:all).collect { |project| self.new project }
-        search_by_attribute(projects, options, limit)
+        search_by_attribute(self._basecamp_projects, options, limit)
+      end
+
+      def self._basecamp_projects
+        API.find(:all).collect { |project| self.new project }
       end
 
       # copy from this.copy(that) copies that into this
