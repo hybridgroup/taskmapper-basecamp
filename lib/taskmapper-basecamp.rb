@@ -11,7 +11,7 @@ class Hash
     end
 
     def scrub_attributes(xml)
-      xml.gsub(/<stories.*>/, "<stories
+      xml.gsub(/<[(\w+)|(\w+\-\w+)]>/, "<#{$1}
                                      type=\"array\">")
     end
   end
