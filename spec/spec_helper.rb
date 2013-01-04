@@ -11,6 +11,6 @@ RSpec.configure do |config|
   config.formatter = 'documentation'
 end
 
-def fixture_for(name)
-  File.read(File.dirname(__FILE__) + '/fixtures/' + name + '.xml')
+def fixture_for(name, format = 'xml')
+  File.read(File.dirname(__FILE__) + "/fixtures/#{name}.#{format}")
 end

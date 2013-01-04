@@ -8,8 +8,12 @@ gem "xml-simple", "~> 1.1"
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
 group :development do
-  gem "rspec", "~> 2.3"
+  gem "rspec" 
   gem "jeweler", "~> 1.6"
+  gem "guard"
+  gem "guard-rspec"
+  gem "libnotify"
+  gem "rb-inotify"
   gem "simplecov", "~> 0.5", :platforms => :ruby_19
   gem "rcov", "~> 1.0", :platforms => :ruby_18
 end

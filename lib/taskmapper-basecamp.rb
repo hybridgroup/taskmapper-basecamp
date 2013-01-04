@@ -1,3 +1,4 @@
+require 'active_support/all'
 require File.dirname(__FILE__) + '/basecamp/basecamp.rb'
 
 # Monkey patch for backward compatibility issue with type cast on xml response
