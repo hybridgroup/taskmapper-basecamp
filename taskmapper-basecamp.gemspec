@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "taskmapper-basecamp"
-  s.version = "0.6.3"
+  s.version = "0.6.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["HybridGroup"]
-  s.date = "2013-01-03"
+  s.date = "2013-01-04"
   s.description = "This gem provides an interface to basecamp through the taskmapper gem"
   s.email = "hong.quach@abigfisch.com"
   s.extra_rdoc_files = [
@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
     ".travis.yml",
     "Gemfile",
     "Gemfile.lock",
+    "Guardfile",
     "LICENSE",
     "README.md",
     "Rakefile",
@@ -64,7 +65,8 @@ Gem::Specification.new do |s|
     "spec/spec_helper.rb",
     "spec/taskmapper-basecamp_spec.rb",
     "spec/tickets_spec.rb",
-    "taskmapper-basecamp.gemspec"
+    "taskmapper-basecamp.gemspec",
+    "tmp/rspec_guard_result"
   ]
   s.homepage = "http://github.com/kiafaldorius/taskmapper-basecamp"
   s.require_paths = ["lib"]
@@ -77,23 +79,35 @@ Gem::Specification.new do |s|
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<taskmapper>, ["~> 0.8"])
       s.add_runtime_dependency(%q<xml-simple>, ["~> 1.1"])
-      s.add_development_dependency(%q<rspec>, ["~> 2.3"])
+      s.add_development_dependency(%q<rspec>, [">= 0"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.6"])
+      s.add_development_dependency(%q<guard>, [">= 0"])
+      s.add_development_dependency(%q<guard-rspec>, [">= 0"])
+      s.add_development_dependency(%q<libnotify>, [">= 0"])
+      s.add_development_dependency(%q<rb-inotify>, [">= 0"])
       s.add_development_dependency(%q<simplecov>, ["~> 0.5"])
       s.add_development_dependency(%q<rcov>, ["~> 1.0"])
     else
       s.add_dependency(%q<taskmapper>, ["~> 0.8"])
       s.add_dependency(%q<xml-simple>, ["~> 1.1"])
-      s.add_dependency(%q<rspec>, ["~> 2.3"])
+      s.add_dependency(%q<rspec>, [">= 0"])
       s.add_dependency(%q<jeweler>, ["~> 1.6"])
+      s.add_dependency(%q<guard>, [">= 0"])
+      s.add_dependency(%q<guard-rspec>, [">= 0"])
+      s.add_dependency(%q<libnotify>, [">= 0"])
+      s.add_dependency(%q<rb-inotify>, [">= 0"])
       s.add_dependency(%q<simplecov>, ["~> 0.5"])
       s.add_dependency(%q<rcov>, ["~> 1.0"])
     end
   else
     s.add_dependency(%q<taskmapper>, ["~> 0.8"])
     s.add_dependency(%q<xml-simple>, ["~> 1.1"])
-    s.add_dependency(%q<rspec>, ["~> 2.3"])
+    s.add_dependency(%q<rspec>, [">= 0"])
     s.add_dependency(%q<jeweler>, ["~> 1.6"])
+    s.add_dependency(%q<guard>, [">= 0"])
+    s.add_dependency(%q<guard-rspec>, [">= 0"])
+    s.add_dependency(%q<libnotify>, [">= 0"])
+    s.add_dependency(%q<rb-inotify>, [">= 0"])
     s.add_dependency(%q<simplecov>, ["~> 0.5"])
     s.add_dependency(%q<rcov>, ["~> 1.0"])
   end
