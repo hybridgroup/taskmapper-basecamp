@@ -141,6 +141,12 @@ module TaskMapper::Provider
         self.completed_on = comp
       end
 
+      def updated_at
+        self.completed_on.to_time
+      rescue NoMethodError
+        Time.now
+      end
+
       def description
         self.content
       end

@@ -9,11 +9,11 @@ describe TaskMapper::Provider::Basecamp::Comment do
 
   before(:each) do
     @headers = {'Authorization' => 'Basic MDAwMDAwOkJhc2VjYW1w'}
-    gheaders = @headers.merge 'Accept' => 'application/xml'
+    gheaders = @headers.merge 'Accept' => 'application/json'
     
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get '/projects/5220065.xml', @headers, fixture_for('projects/5220065'), 200
-      mock.get '/todo_lists.xml?responsible_party=', @headers, fixture_for('todo_list_with_items'), 200
+      mock.get '/projects/5220065.json', @headers, fixture_for('projects/5220065', 'json'), 200
+      mock.get '/todo_lists.json?responsible_party=', @headers, fixture_for('todo_list_with_items', 'json'), 200
     end
     @project = tm.project(project_id)
     @ticket = @project.ticket(ticket_id)
@@ -22,9 +22,9 @@ describe TaskMapper::Provider::Basecamp::Comment do
   describe "Retrieving comments" do 
     before(:each) do 
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get '/todo_items/133184178/comments.xml', @headers, fixture_for('comments'), 200
-        mock.get '/todo_items/133184178/comments/74197051.xml', @headers, fixture_for('comments/74197051'), 200
-        mock.get '/todo_items/133184178/comments/74197096.xml', @headers, fixture_for('comments/74197096'), 200
+        mock.get '/todo_items/133184178/comments.json', @headers, fixture_for('comments', 'json'), 200
+        mock.get '/todo_items/133184178/comments/74197051.json', @headers, fixture_for('comments/74197051', 'json'), 200
+        mock.get '/todo_items/133184178/comments/74197096.json', @headers, fixture_for('comments/74197096', 'json'), 200
       end
     end
 
@@ -53,8 +53,8 @@ describe TaskMapper::Provider::Basecamp::Comment do
   describe "Retrieve a single comment from a ticket" do 
     before(:each) do 
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get '/todo_items/133184178/comments.xml', @headers, fixture_for('comments'), 200
-        mock.get '/todo_items/133184178/comments/74197051.xml', @headers, fixture_for('comments/74197051'), 200
+        mock.get '/todo_items/133184178/comments.json', @headers, fixture_for('comments', 'json'), 200
+        mock.get '/todo_items/133184178/comments/74197051.json', @headers, fixture_for('comments/74197051', 'json'), 200
       end
     end
 
@@ -73,12 +73,12 @@ describe TaskMapper::Provider::Basecamp::Comment do
 
   describe "Create and update a comment for a ticket" do 
     before(:each) do 
-      pheaders = @headers.merge 'Content-Type'=>'application/xml'
+      pheaders = @headers.merge 'Content-Type'=>'application/json'
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get '/todo_items/133184178/comments/74197051.xml', @headers, fixture_for('comments/74197051'), 200
-        mock.get '/todo_items/133184178/comments.xml', @headers, fixture_for('comments'), 200
-        mock.put '/todo_items/133184178/comments/74197051.xml', @headers, '', 200
-        mock.post '/todo_items/133184178/comments.xml', pheaders, fixture_for('comments/74197051'), 200
+        mock.get '/todo_items/133184178/comments/74197051.json', @headers, fixture_for('comments/74197051', 'json'), 200
+        mock.get '/todo_items/133184178/comments.json', @headers, fixture_for('comments', 'json'), 200
+        mock.put '/todo_items/133184178/comments/74197051.json', @headers, '', 200
+        mock.post '/todo_items/133184178/comments.json', pheaders, fixture_for('comments/74197051', 'json'), 200
       end
     end
 

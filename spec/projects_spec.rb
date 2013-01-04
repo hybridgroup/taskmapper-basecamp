@@ -11,9 +11,9 @@ describe TaskMapper::Provider::Basecamp::Project do
   context "When I retrieve projects" do 
     before(:each) do 
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get '/projects.xml', headers, fixture_for('projects'), 200
-        mock.get '/projects/5220065.xml', headers, fixture_for('projects/5220065'), 200
-        mock.get '/projects.xml', headers, fixture_for('projects'), 200
+        mock.get '/projects.json', headers, fixture_for('projects', 'json'), 200
+        mock.get '/projects/5220065.json', headers, fixture_for('projects/5220065', 'json'), 200
+        mock.get '/projects.json', headers, fixture_for('projects','json'), 200
       end
     end
     describe :projects do 

@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 describe TaskMapper::Provider::Basecamp::Ticket do
   let(:project_id) { 5220065 }
   let(:headers) { {'Authorization' => 'Basic MDAwMDAwOkJhc2VjYW1w'} }
-  let(:wheaders) { headers.merge('Content-Type' => 'application/xml') }
+  let(:wheaders) { headers.merge('Content-Type' => 'application/json') }
   let(:project) { tm.project(project_id) }
   let(:tm) { TaskMapper.new(:basecamp, :domain => 'ticketmaster.basecamphq.com', :token => '000000') }
   let(:ticket_class) { TaskMapper::Provider::Basecamp::Ticket }
@@ -11,8 +11,8 @@ describe TaskMapper::Provider::Basecamp::Ticket do
   context "Retrieve tickets" do 
     before(:all) do 
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get '/projects/5220065.xml', headers, fixture_for('projects/5220065'), 200
-        mock.get '/todo_lists.xml?responsible_party=', headers, fixture_for('todo_list_with_items'), 200
+        mock.get '/projects/5220065.json', headers, fixture_for('projects/5220065', 'json'), 200
+        mock.get '/todo_lists.json?responsible_party=', headers, fixture_for('todo_list_with_items', 'json'), 200
       end
     end
     
@@ -22,7 +22,6 @@ describe TaskMapper::Provider::Basecamp::Ticket do
       its(:priority) { should == 1 }
       its(:status) { should == 'incomplete' }
       its(:resolution) { should == 'In Progress' }
-      its(:created_at) { should be_an_instance_of Time }
       its(:updated_at) { should be_an_instance_of Time }
       its(:description) { should match /updated/ }
       its(:assignee) { should == 'Unassigned' }
@@ -34,7 +33,7 @@ describe TaskMapper::Provider::Basecamp::Ticket do
       let(:tickets) { project.tickets }
       subject { tickets }
 
-      its(:count) { should == 4 }
+      its(:count) { should == 2 }
       
       describe :first do 
         subject { tickets.first }
@@ -63,8 +62,8 @@ describe TaskMapper::Provider::Basecamp::Ticket do
   pending "Update and creation" do 
     before(:all) do 
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.post '/todo_lists/9972756/todo_items.xml', wheaders, '', 200
-        mock.post '/projects/5220065/todo_lists.xml', wheaders, '', 200
+        mock.post '/todo_lists/9972756/todo_items.json', wheaders, '', 200
+        mock.post '/projects/5220065/todo_lists.json', wheaders, '', 200
       end
     end
 
