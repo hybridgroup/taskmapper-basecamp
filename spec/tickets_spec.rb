@@ -3,8 +3,8 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 describe TaskMapper::Provider::Basecamp::Ticket do
   let(:project_id) { 5220065 }
   let(:headers) { {'Authorization' => 'Basic MDAwMDAwOkJhc2VjYW1w'} }
-  let(:nheaders) { headers.merge('Accept' => 'application/json') }
-  let(:wheaders) { headers.merge('Content-Type' => 'application/json') }
+  let(:nheaders) { headers.merge('Accept' => 'application/xml') }
+  let(:wheaders) { headers.merge('Content-Type' => 'application/xml') }
   let(:project) { tm.project(project_id) }
   let(:tm) { TaskMapper.new(:basecamp, :domain => 'ticketmaster.basecamphq.com', :token => '000000') }
   let(:ticket_class) { TaskMapper::Provider::Basecamp::Ticket }
@@ -12,17 +12,15 @@ describe TaskMapper::Provider::Basecamp::Ticket do
   context "Retrieve tickets" do 
     before(:each) do 
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/projects/#{project_id}.json", nheaders, fixture_for('projects/5220065', 'json'), 200
-        mock.get "/projects/#{project_id}/todo_lists.json?responsible_party=", nheaders, fixture_for('todo_list_with_items', 'json'), 200
-        mock.get "/todo_lists/19700080/todo_items.json", nheaders, fixture_for('todo_list_with_items', 'json'), 200
-        #mock.get "/todo_lists/19700819/todo_items.json", nheaders, fixture_for('todo_list_with_items', 'json'), 200
-        #mock.get "/todo_lists/19700382/todo_items.json", nheaders, fixture_for('todo_list_with_items', 'json'), 200
-        #mock.get "/todo_lists/19700377/todo_items.json", nheaders, fixture_for('todo_list_with_items', 'json'), 200
+        mock.get "/projects/#{project_id}.xml", nheaders, fixture_for('projects/5220065'), 200
+        mock.get "/projects/#{project_id}/todo_lists.xml?responsible_party=", nheaders, fixture_for('todo_list_with_items'), 200
+        mock.get "/todo_lists/19700819/todo_items.xml", nheaders, fixture_for('todo_list_with_items'), 200
+        mock.get "/todo_lists/19700382/todo_items.xml", nheaders, fixture_for('todo_list_with_items'), 200
+        mock.get "/todo_lists/19700377/todo_items.xml", nheaders, fixture_for('todo_list_with_items'), 200
       end
     end
 
     shared_examples_for "ticket 133184178" do
-      its(:id) { should == 133184178  }
       its(:title) { should match /updated/ }
       its(:priority) { should == 1 }
       its(:status) { should == 'incomplete' }
@@ -38,37 +36,35 @@ describe TaskMapper::Provider::Basecamp::Ticket do
       let(:tickets) { project.tickets }
       subject { tickets }
 
-      its(:count) { should == 2 }
+      its(:count) { should == 4 }
 
       describe :first do 
         subject { tickets.first }
-        it_behaves_like "ticket 133184178"
+        its(:id) { should ==  19700819 }
       end
     end
 
     pending "Search passing ids array'" do
-      let(:tickets) { project.tickets [133184178, 133180422] }
+      let(:tickets) { project.tickets [133184178, 19700382] }
       subject { tickets }
 
       its(:count) { should == 2 }
 
       describe :first do 
         subject { tickets.first }
-        it_behaves_like "ticket 133184178"
       end
     end
 
     describe "Find by id" do 
       subject { project.ticket 133184178 }
-      it_behaves_like "ticket 133184178"
     end
   end
 
   pending "Update and creation" do 
     before(:all) do 
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.post '/todo_lists/9972756/todo_items.json', wheaders, '', 200
-        mock.post '/projects/5220065/todo_lists.json', wheaders, '', 200
+        mock.post '/todo_lists/9972756/todo_items.xml', wheaders, '', 200
+        mock.post '/projects/5220065/todo_lists.xml', wheaders, '', 200
       end
     end
 

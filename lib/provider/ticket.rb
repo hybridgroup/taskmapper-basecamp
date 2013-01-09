@@ -37,8 +37,7 @@ module TaskMapper::Provider
         end
 
         def search(project_id, options = {}, limit = 1000)
-          tickets = project_todo_lists(project).map { |ti| self.new ti.attributes.merge :project_id => project_id }
-            #todo_items(project_id).map {|ti| self.new ti.attributes.merge :project_id => project_id }
+          tickets = todo_items(project_id).map {|ti| self.new ti.attributes.merge :project_id => project_id }
           search_by_attribute(tickets, options, limit)
         end
 
@@ -62,7 +61,6 @@ module TaskMapper::Provider
         def todo_items(project_id)
           project_todo_lists(project_id).map { |l| l.todo_items }.flatten
         end
-
 
         def create_todo_item_hash(ticket_hash)
           a = ticket_hash
