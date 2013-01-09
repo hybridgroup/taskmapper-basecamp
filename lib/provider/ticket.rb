@@ -37,7 +37,8 @@ module TaskMapper::Provider
         end
 
         def search(project_id, options = {}, limit = 1000)
-          tickets = todo_items(project_id).map {|ti| self.new ti.attributes.merge :project_id => project_id }
+          tickets = project_todo_lists(project).map { |ti| self.new ti.attributes.merge :project_id => project_id }
+            #todo_items(project_id).map {|ti| self.new ti.attributes.merge :project_id => project_id }
           search_by_attribute(tickets, options, limit)
         end
 

@@ -3,19 +3,24 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 describe TaskMapper::Provider::Basecamp::Ticket do
   let(:project_id) { 5220065 }
   let(:headers) { {'Authorization' => 'Basic MDAwMDAwOkJhc2VjYW1w'} }
+  let(:nheaders) { headers.merge('Accept' => 'application/json') }
   let(:wheaders) { headers.merge('Content-Type' => 'application/json') }
   let(:project) { tm.project(project_id) }
   let(:tm) { TaskMapper.new(:basecamp, :domain => 'ticketmaster.basecamphq.com', :token => '000000') }
   let(:ticket_class) { TaskMapper::Provider::Basecamp::Ticket }
 
   context "Retrieve tickets" do 
-    before(:all) do 
+    before(:each) do 
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get '/projects/5220065.json', headers, fixture_for('projects/5220065', 'json'), 200
-        mock.get '/todo_lists.json?responsible_party=', headers, fixture_for('todo_list_with_items', 'json'), 200
+        mock.get "/projects/#{project_id}.json", nheaders, fixture_for('projects/5220065', 'json'), 200
+        mock.get "/projects/#{project_id}/todo_lists.json?responsible_party=", nheaders, fixture_for('todo_list_with_items', 'json'), 200
+        mock.get "/todo_lists/19700080/todo_items.json", nheaders, fixture_for('todo_list_with_items', 'json'), 200
+        #mock.get "/todo_lists/19700819/todo_items.json", nheaders, fixture_for('todo_list_with_items', 'json'), 200
+        #mock.get "/todo_lists/19700382/todo_items.json", nheaders, fixture_for('todo_list_with_items', 'json'), 200
+        #mock.get "/todo_lists/19700377/todo_items.json", nheaders, fixture_for('todo_list_with_items', 'json'), 200
       end
     end
-    
+
     shared_examples_for "ticket 133184178" do
       its(:id) { should == 133184178  }
       its(:title) { should match /updated/ }
@@ -34,19 +39,19 @@ describe TaskMapper::Provider::Basecamp::Ticket do
       subject { tickets }
 
       its(:count) { should == 2 }
-      
+
       describe :first do 
         subject { tickets.first }
         it_behaves_like "ticket 133184178"
       end
     end
-    
+
     pending "Search passing ids array'" do
       let(:tickets) { project.tickets [133184178, 133180422] }
       subject { tickets }
-      
+
       its(:count) { should == 2 }
-      
+
       describe :first do 
         subject { tickets.first }
         it_behaves_like "ticket 133184178"

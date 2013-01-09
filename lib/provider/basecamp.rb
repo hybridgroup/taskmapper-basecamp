@@ -22,7 +22,7 @@ module TaskMapper::Provider
       if auth.domain.nil? and auth.subdomain
         auth.domain = (auth.subdomain.include?('.') ? auth.subdomain : auth.subdomain + '.basecamphq.com')
       end
-      ::Basecamp.establish_connection!(auth.domain, auth.username, auth.password, auth.ssl, false)
+      ::Basecamp.establish_connection!(auth.domain, auth.username, auth.password, auth.ssl)
     end
 
     def valid?
