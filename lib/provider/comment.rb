@@ -7,7 +7,7 @@ module TaskMapper::Provider
     #
     class Comment < TaskMapper::Provider::Base::Comment
       # declare needed overloaded methods here
-      API = BasecampAPI::Comment
+      API = ::Basecamp::Comment
 
       def initialize(*object)
         if object.first

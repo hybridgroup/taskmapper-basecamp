@@ -2,12 +2,12 @@ module TaskMapper::Provider
   # This is the Basecamp Provider for taskmapper
   module Basecamp
     include TaskMapper::Provider::Base
-    
+
     # This is for cases when you want to instantiate using TaskMapper::Provider::Basecamp.new(auth)
     def self.new(auth = {})
       TaskMapper.new(:basecamp, auth)
     end
-    
+
     def authorize(auth = {})
       auth[:ssl] = true
       @authentication ||= TaskMapper::Authenticator.new(auth)
@@ -22,17 +22,15 @@ module TaskMapper::Provider
       if auth.domain.nil? and auth.subdomain
         auth.domain = (auth.subdomain.include?('.') ? auth.subdomain : auth.subdomain + '.basecamphq.com')
       end
-      BasecampAPI.establish_connection!(auth.domain, auth.username, auth.password, auth.ssl)
+      ::Basecamp.establish_connection!(auth.domain, auth.username, auth.password, auth.ssl, false)
     end
 
     def valid?
-      begin
-        !project_count = BasecampAPI::People.find(:me).nil?
-      rescue
-        false
-      end
+      !project_count = ::Basecamp::Person.me.nil?
+    rescue ActiveResource::UnauthorizedAccess
+      false
     end
-    
+
   end
 end
 

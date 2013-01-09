@@ -13,7 +13,7 @@ rescue LoadError
     abort <<-ERROR
 The 'xml-simple' library could not be loaded. If you have RubyGems installed
 you can install xml-simple by doing "gem install xml-simple".
-ERROR
+    ERROR
   end
 end
 
@@ -27,7 +27,7 @@ rescue LoadError
     abort <<-ERROR
 The 'active_resource' library could not be loaded. If you have RubyGems 
 installed you can install ActiveResource by doing "gem install activeresource".
-ERROR
+    ERROR
   end
 end
 
@@ -163,6 +163,15 @@ class BasecampAPI
     end
   end
 
+
+  class ProjectJsonFormatter
+    include ActiveResource::Formats::JsonFormat
+
+    def decode(json)
+      ActiveSupport::JSON.decode(json)['records']
+    end
+  end
+
   class Resource < ActiveResource::Base #:nodoc:
     self.format = :json
     class << self
@@ -190,7 +199,7 @@ class BasecampAPI
         end
       end
     end
-    
+
     # Commented because it was causing a Missing prefix error when updating a TodoItem
     #def prefix_options
     #  id ? {} : super
@@ -204,6 +213,7 @@ class BasecampAPI
   end
 
   class Project < Resource
+    self.format = ProjectJsonFormatter.new
   end
 
   class Company < Resource
@@ -313,7 +323,7 @@ class BasecampAPI
       @todo_items ||= TodoItem.find(:all, :params => options.merge(:todo_list_id => id))
     end
   end
-  
+
   # This resource is to address GET /todo_lists.xml?responsible_party=#{id}
   # To retrieve Todo lists with items inside in one request
   class TodoListWithItems < Resource

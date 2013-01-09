@@ -8,7 +8,7 @@ module TaskMapper::Provider
     # created_at => created_on
     # updated_at => last_changed_on
     class Project < TaskMapper::Provider::Base::Project
-      API = BasecampAPI::Project
+      API = ::Basecamp::Project
 
       def initialize(*backend_info) 
         @system_data ||= {}
@@ -51,11 +51,8 @@ module TaskMapper::Provider
       end
 
       def self.search(options = {}, limit = 1000)
-        search_by_attribute(self._basecamp_projects, options, limit)
-      end
-
-      def self._basecamp_projects
-        API.find(:all).collect { |project| self.new project }
+        projects = API.find(:all).collect { |project| self.new project }
+        search_by_attribute(projects, options, limit)
       end
 
       # copy from this.copy(that) copies that into this
