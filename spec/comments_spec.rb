@@ -29,7 +29,7 @@ describe TaskMapper::Provider::Basecamp::Comment do
 
     shared_examples_for "comment 74197051" do 
       its(:id) { should == 74197051 }
-      its(:body) { should == "Hello There" }
+      its(:body) { should == "<div>Hello There<br /></div>" }
       its(:created_at) { should be_an_instance_of Time }
     end
 
