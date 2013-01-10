@@ -20,15 +20,13 @@ describe TaskMapper::Provider::Basecamp::Ticket do
       end
     end
 
-    shared_examples_for "ticket 133184178" do
-      its(:title) { should match /updated/ }
+    shared_examples_for "ticket 19700819" do
+      its(:id) { should ==  19700819 }
       its(:priority) { should == 1 }
-      its(:status) { should == 'incomplete' }
-      its(:resolution) { should == 'In Progress' }
+      its(:status) { should == "incomplete" }
+      its(:resolution) { should == "In Progress" }
       its(:updated_at) { should be_an_instance_of Time }
-      its(:description) { should match /updated/ }
-      its(:assignee) { should == 'Unassigned' }
-      its(:requestor) { should match /Clutch/ }
+      its(:assignee) { should == "Unassigned" }
       its(:project_id) { should == 5220065 }
     end
 
@@ -40,23 +38,25 @@ describe TaskMapper::Provider::Basecamp::Ticket do
 
       describe :first do 
         subject { tickets.first }
-        its(:id) { should ==  19700819 }
+        it_should_behave_like "ticket 19700819"
       end
     end
 
-    pending "Search passing ids array'" do
-      let(:tickets) { project.tickets [133184178, 19700382] }
+    describe "Search passing ids array'" do
+      let(:tickets) { project.tickets [19700819, 19700382] }
       subject { tickets }
 
       its(:count) { should == 2 }
 
       describe :first do 
         subject { tickets.first }
+        it_should_behave_like "ticket 19700819"
       end
     end
 
     describe "Find by id" do 
-      subject { project.ticket 133184178 }
+      subject { project.ticket 19700819 }
+      it_should_behave_like "ticket 19700819"
     end
   end
 
