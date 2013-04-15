@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "taskmapper-basecamp"
-  s.version = "0.7.1"
+  s.version = "0.7.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["HybridGroup"]
-  s.date = "2013-01-10"
+  s.date = "2013-04-15"
   s.description = "This gem provides an interface to basecamp through the taskmapper gem"
   s.email = "hong.quach@abigfisch.com"
   s.extra_rdoc_files = [
@@ -70,14 +70,14 @@ Gem::Specification.new do |s|
   ]
   s.homepage = "http://github.com/kiafaldorius/taskmapper-basecamp"
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.24"
+  s.rubygems_version = "1.8.25"
   s.summary = "The basecamp provider for taskmapper"
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<taskmapper>, ["~> 0.8"])
+      s.add_runtime_dependency(%q<taskmapper>, ["~> 1.0"])
       s.add_runtime_dependency(%q<basecamp>, [">= 0"])
       s.add_development_dependency(%q<rspec>, [">= 0"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.6"])
@@ -88,7 +88,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<simplecov>, ["~> 0.5"])
       s.add_development_dependency(%q<rcov>, ["~> 1.0"])
     else
-      s.add_dependency(%q<taskmapper>, ["~> 0.8"])
+      s.add_dependency(%q<taskmapper>, ["~> 1.0"])
       s.add_dependency(%q<basecamp>, [">= 0"])
       s.add_dependency(%q<rspec>, [">= 0"])
       s.add_dependency(%q<jeweler>, ["~> 1.6"])
@@ -100,7 +100,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<rcov>, ["~> 1.0"])
     end
   else
-    s.add_dependency(%q<taskmapper>, ["~> 0.8"])
+    s.add_dependency(%q<taskmapper>, ["~> 1.0"])
     s.add_dependency(%q<basecamp>, [">= 0"])
     s.add_dependency(%q<rspec>, [">= 0"])
     s.add_dependency(%q<jeweler>, ["~> 1.6"])
