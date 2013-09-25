@@ -69,7 +69,7 @@ module TaskMapper::Provider
             :content => a[:title],
             :position => a[:priority] || 1,
             :todo_list_id => a[:todo_list_id] || create_todo_list({
-            :project_id => a[:project_id], 
+            :project_id => a[:project_id],
             :name => "#{a[:title]} list"}).id
           }
         end
@@ -161,7 +161,6 @@ module TaskMapper::Provider
       def comment!(attributes)
         Comment.create id, attributes
       end
-
     end
   end
 end

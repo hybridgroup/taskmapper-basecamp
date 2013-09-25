@@ -45,7 +45,7 @@ module TaskMapper::Provider
         new_comment.save
 
         reloaded_comment = find_bc_comment(ticket_id, new_comment.id)
-        self.new reloaded_comment.attributes.merge!(:ticket_id => ticket_id) 
+        self.new reloaded_comment.attributes.merge!(:ticket_id => ticket_id)
       end
 
       def save
@@ -57,7 +57,7 @@ module TaskMapper::Provider
       private
       def self.find_bc_comment(ticket_id, id)
         API.find id, :params => { :todo_item_id => ticket_id }
-      end      
+      end
     end
   end
 end

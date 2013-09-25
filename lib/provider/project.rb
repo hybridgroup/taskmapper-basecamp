@@ -2,7 +2,7 @@ module TaskMapper::Provider
   module Basecamp
     # Project class for taskampper-basecamp
     #
-    # Remaps 
+    # Remaps
     #
     # description => announcement
     # created_at => created_on
@@ -10,10 +10,10 @@ module TaskMapper::Provider
     class Project < TaskMapper::Provider::Base::Project
       API = ::Basecamp::Project
 
-      def initialize(*backend_info) 
+      def initialize(*backend_info)
         @system_data ||= {}
         data = backend_info.first
-        case data 
+        case data
         when Hash
           super data.to_hash
         else
@@ -65,9 +65,6 @@ module TaskMapper::Provider
           end
         end
       end
-
     end
   end
 end
-
-
