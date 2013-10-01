@@ -17,4 +17,8 @@ describe "TaskMapper::Basecamp" do
     pending
     @ticketmaster.valid?.should be_true
   end
+
+  it "should have a version" do
+    expect(TaskMapper::Provider::Basecamp::VERSION).to be_a String
+  end
 end
