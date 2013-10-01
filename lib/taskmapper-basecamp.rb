@@ -1,3 +1,4 @@
+require 'taskmapper'
 require 'basecamp'
 require 'active_support/all'
 
