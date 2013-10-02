@@ -10,16 +10,11 @@ module TaskMapper::Provider
     class Project < TaskMapper::Provider::Base::Project
       API = BasecampAPI::Project
 
-      def initialize(*backend_info)
+      def initialize(*data)
         @system_data ||= {}
-        data = backend_info.first
-        case data
-        when Hash
-          super data.to_hash
-        else
-          @system_data[:client] = data
-          super data.attributes
-        end
+        data = data.first if data.is_a? Array
+        @system_data[:client] = data
+        super data.attributes
       end
 
       def description
@@ -27,38 +22,48 @@ module TaskMapper::Provider
       end
 
       def created_at
-        created_on.to_time
-      rescue
-        created_on
+        begin
+          Time.parse created_on
+        rescue
+          created_on
+        end
       end
 
       def updated_at
-        last_changed_on.to_time
-      rescue
-        last_changed_on
+        begin
+          Time.parse last_changed_on
+        rescue
+          last_changed_on
+        end
       end
 
       def ticket!(attributes_hash)
-        provider_parent(self.class)::Ticket.create attributes_hash.merge :project_id => id
+        Ticket.create attributes_hash.merge(:project_id => id)
       end
 
-      def self.find_by_id(id)
-        self.new API.find(id)
-      end
+      class << self
+        def find_by_id(id)
+          self.new API.find(id)
+        end
 
-      def self.find_by_attributes(attributes = {})
-        self.search(attributes)
-      end
+        def find_by_attributes(attributes = {})
+          search(attributes)
+        end
 
-      def self.search(options = {}, limit = 1000)
-        projects = API.find(:all).collect { |project| self.new project }
-        search_by_attribute(projects, options, limit)
+        def search(options = {}, limit = 1000)
+          projects = API.find(:all).collect { |project| self.new project }
+          search_by_attribute(projects, options, limit)
+        end
       end
 
       # copy from this.copy(that) copies that into this
       def copy(project)
         project.tickets.each do |ticket|
-          copy_ticket = self.ticket!(:title => ticket.title, :description => ticket.description)
+          copy_ticket = self.ticket!(
+            :title => ticket.title,
+            :description => ticket.description
+          )
+
           ticket.comments.each do |comment|
             copy_ticket.comment!(:body => comment.body)
             sleep 1
