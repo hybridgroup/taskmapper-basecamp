@@ -2,20 +2,11 @@ require 'spec_helper'
 
 describe TaskMapper::Provider::Basecamp::Project do
 
-  let(:headers) { {'Authorization' => 'Basic MDAwMDAwOkJhc2VjYW1w'} }
-  let(:wheaders) { headers.merge('Content-Type' => 'application/xml') }
-  let(:tm) { TaskMapper.new(:basecamp, :token => '000000', :domain => 'ticketmaster.basecamphq.com') }
+  let(:tm) { create_instance }
   let(:project_class) { TaskMapper::Provider::Basecamp::Project }
   let(:project_id) { 5220065 }
 
   context "When I retrieve projects" do
-    before(:each) do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get '/projects.xml', headers, fixture_for('projects'), 200
-        mock.get '/projects/5220065.xml', headers, fixture_for('projects/5220065'), 200
-        mock.get '/projects.xml', headers, fixture_for('projects'), 200
-      end
-    end
     describe :projects do
       let(:projects) { tm.projects }
       subject { projects }
@@ -64,13 +55,6 @@ describe TaskMapper::Provider::Basecamp::Project do
   end
 
   describe "Creation and update" do
-    before(:each) do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.post '/projects.xml', wheaders, '', 200
-        mock.get '/projects/5220065.xml', headers, fixture_for('projects/5220065'), 200
-      end
-    end
-
     context "when calling #project!" do
       subject { tm.project!(:name => 'Project #1') }
       pending { should be_an_instance_of(project_class) }

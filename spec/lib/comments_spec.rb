@@ -3,30 +3,13 @@ require 'spec_helper'
 describe TaskMapper::Provider::Basecamp::Comment do
   let(:project_id) { 5220065 }
   let(:ticket_id) { 19700819 }
-  let(:tm) { TaskMapper.new(:basecamp, :domain => 'ticketmaster.basecamphq.com', :token => '000000') }
+  let(:tm) { create_instance }
   let(:comment_class) { TaskMapper::Provider::Basecamp::Comment }
   let(:comment_id) { 74197051 }
-  let(:headers) { {'Authorization' => 'Basic MDAwMDAwOkJhc2VjYW1w'} }
-  let(:nheaders) { headers.merge('Accept' => 'application/xml') }
-  let(:pheaders) { headers.merge('Content-Type'=>'application/xml') }
   let(:project) { tm.project(project_id) }
   let(:ticket) { project.ticket(ticket_id) }
 
   context "Retrieve comments" do
-    before(:each) do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/projects/#{project_id}.xml", nheaders, fixture_for('projects/5220065'), 200
-        mock.get "/projects/#{project_id}/todo_lists.xml?responsible_party=", nheaders, fixture_for('todo_list_with_items'), 200
-        mock.get "/todo_lists/19700819/todo_items.xml", nheaders, fixture_for('todo_list_with_items'), 200
-        mock.get "/todo_lists/19700382/todo_items.xml", nheaders, fixture_for('todo_list_with_items'), 200
-        mock.get "/todo_lists/19700377/todo_items.xml", nheaders, fixture_for('todo_list_with_items'), 200
-
-        mock.get "/todo_items/19700819/comments.xml", nheaders, fixture_for('comments'), 200
-        mock.get "/todo_items/19700819/comments/74197051.xml", nheaders, fixture_for('comments/74197051'), 200
-        mock.get "/todo_items/19700819/comments/74197096.xml", nheaders, fixture_for('comments/74197051'), 200
-      end
-    end
-
     shared_examples_for "comment 74197051" do
       its(:id) { should == 74197051 }
       its(:body) { should == "<div>Hello There<br /></div>" }

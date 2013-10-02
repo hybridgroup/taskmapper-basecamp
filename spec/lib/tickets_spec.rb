@@ -2,24 +2,11 @@ require 'spec_helper'
 
 describe TaskMapper::Provider::Basecamp::Ticket do
   let(:project_id) { 5220065 }
-  let(:headers) { {'Authorization' => 'Basic MDAwMDAwOkJhc2VjYW1w'} }
-  let(:nheaders) { headers.merge('Accept' => 'application/xml') }
-  let(:wheaders) { headers.merge('Content-Type' => 'application/xml') }
   let(:project) { tm.project(project_id) }
-  let(:tm) { TaskMapper.new(:basecamp, :domain => 'ticketmaster.basecamphq.com', :token => '000000') }
+  let(:tm) { create_instance }
   let(:ticket_class) { TaskMapper::Provider::Basecamp::Ticket }
 
   context "Retrieve tickets" do
-    before(:each) do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/projects/#{project_id}.xml", nheaders, fixture_for('projects/5220065'), 200
-        mock.get "/projects/#{project_id}/todo_lists.xml?responsible_party=", nheaders, fixture_for('todo_list_with_items'), 200
-        mock.get "/todo_lists/19700819/todo_items.xml", nheaders, fixture_for('todo_list_with_items'), 200
-        mock.get "/todo_lists/19700382/todo_items.xml", nheaders, fixture_for('todo_list_with_items'), 200
-        mock.get "/todo_lists/19700377/todo_items.xml", nheaders, fixture_for('todo_list_with_items'), 200
-      end
-    end
-
     shared_examples_for "ticket 19700819" do
       its(:id) { should ==  19700819 }
       its(:priority) { should == 1 }
@@ -61,13 +48,6 @@ describe TaskMapper::Provider::Basecamp::Ticket do
   end
 
   pending "Update and creation" do
-    before(:all) do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.post '/todo_lists/9972756/todo_items.xml', wheaders, '', 200
-        mock.post '/projects/5220065/todo_lists.xml', wheaders, '', 200
-      end
-    end
-
     context "when an instance of ticket is changed and then called the save method" do
       subject { project.ticket(133184178) }
       pending { subject.save.should be_false }
