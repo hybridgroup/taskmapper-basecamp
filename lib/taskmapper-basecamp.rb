@@ -1,6 +1,5 @@
 require 'taskmapper'
 require 'basecamp'
-require 'active_support/all'
 
 module HTMLStripper
   def remove_tags
