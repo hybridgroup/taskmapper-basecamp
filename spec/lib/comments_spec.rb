@@ -1,66 +1,64 @@
 require 'spec_helper'
 
-describe TaskMapper::Provider::Basecamp::Comment do
+describe TaskMapper::Provider::Basecamp::Ticket do
   let(:project_id) { 5220065 }
   let(:ticket_id) { 19700819 }
-  let(:tm) { create_instance }
-  let(:comment_class) { TaskMapper::Provider::Basecamp::Comment }
   let(:comment_id) { 74197051 }
-  let(:project) { tm.project(project_id) }
-  let(:ticket) { project.ticket(ticket_id) }
+  let(:tm) { create_instance }
+  let(:project) { tm.project project_id }
+  let(:ticket) { project.ticket ticket_id }
+  let(:comment_class) { TaskMapper::Provider::Basecamp::Comment }
 
-  context "Retrieve comments" do
-    shared_examples_for "comment 74197051" do
-      its(:id) { should == 74197051 }
-      its(:body) { should == "<div>Hello There<br /></div>" }
-      its(:created_at) { should be_an_instance_of Time }
-    end
-
-    describe "Retrieve all" do
+  describe "#comments" do
+    context "without arguments" do
       let(:comments) { ticket.comments }
-      subject { comments }
-      its(:count) { should == 4 }
 
-      describe :first do
-        subject { comments.first }
-        it_should_behave_like "comment 74197051"
+      it "returns an array of all comments" do
+        expect(comments).to be_an Array
+        expect(comments.first).to be_a comment_class
       end
     end
 
-    describe "Search passing ids array" do
-      let(:comments) { ticket.comments [74197051, 74197096] }
-      subject { comments }
+    context "with an array of comment IDs" do
+      let(:comments) { ticket.comments [comment_id] }
 
-      its(:count) { should == 2 }
-
-      describe :first do
-        subject { comments.first }
-        it_should_behave_like "comment 74197051"
+      it "returns an array of matching comments" do
+        expect(comments).to be_an Array
+        expect(comments.first).to be_a comment_class
+        expect(comments.first.id).to eq comment_id
       end
     end
 
-    describe "Find by id" do
-      subject { ticket.comment 74197051 }
-      it_should_behave_like  "comment 74197051"
+    context "with a hash containing a comment ID" do
+      let(:comments) { ticket.comments :id => comment_id }
+
+      it "returns an array containing the matching comment" do
+        expect(comments).to be_an Array
+        expect(comments.first).to be_a comment_class
+        expect(comments.first.id).to eq comment_id
+      end
     end
   end
 
-  pending "Create and update a comment for a ticket" do
-    context "when a comment is changed and then called the #save on it" do
-      it do
-        comment = ticket.comment(comment_id)
-        comment.body = "updated comment"
-        comment.save.should be_true
-        comment.body.should be_eql("updated comment")
+  describe "#comment" do
+    context "with a comment ID" do
+      let(:comment) { ticket.comment comment_id}
+
+      it "returns the matching comment" do
+        expect(comment).to be_a comment_class
+        expect(comment.id).to eq comment_id
       end
     end
+  end
 
-    context "when #comment! is call" do
-      subject { ticket.comment!(:body => 'hello there boys and girls') }
-      it { should be_an_instance_of(comment_class) }
-      it { subject.body.should_not be_nil }
-      it { subject.id.should_not be_nil }
-      it { subject.ticket_id.should_not be_nil }
+  pending "#comment!" do
+    context "with a comment body" do
+      let(:comment) { ticket.comment! :body => "New Comment" }
+
+      it "creates a new comment" do
+        expect(comment).to be_a comment_class
+        epxect(comment.body).to eq "New Comment"
+      end
     end
   end
 end

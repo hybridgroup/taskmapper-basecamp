@@ -47,7 +47,7 @@ end
 
 RSpec.configure do |c|
   c.before do
-    stub_get "#{base_uri}/me.json", 'project_count.xml'
+    stub_get "#{base_uri}/people/me.xml", 'project_count.xml'
     stub_get "#{base_uri}/projects.xml", "projects.xml"
     stub_get "#{base_uri}/projects/5220065.xml", "projects/5220065.xml"
     stub_get "#{base_uri}/projects/5220065/todo_lists.xml?responsible_party=", 'todo_list_with_items.xml'
