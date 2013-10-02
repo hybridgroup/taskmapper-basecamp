@@ -55,7 +55,7 @@ module TaskMapper::Provider
 
         private
         def project_todo_lists(project_id)
-          ::Basecamp::TodoList.find(:all, :params => {:project_id => project_id, :responsible_party => ''})
+          BasecampAPI::TodoList.find(:all, :params => {:project_id => project_id, :responsible_party => ''})
         end
 
         def todo_items(project_id)
@@ -75,7 +75,7 @@ module TaskMapper::Provider
         end
 
         def create_todo_item(attributes_hash)
-          ::Basecamp::TodoItem.new(attributes_hash)
+          BasecampAPI::TodoItem.new(attributes_hash)
         end
 
         def validate_ticket_hash(attributes_hash)
@@ -84,7 +84,7 @@ module TaskMapper::Provider
         end
 
         def create_todo_list(attributes)
-          ::Basecamp::TodoList.create(attributes)
+          BasecampAPI::TodoList.create(attributes)
         end
       end
 
@@ -100,7 +100,7 @@ module TaskMapper::Provider
       end
 
       def save
-        todo_item = ::Basecamp::TodoItem.find id, :params => { :todo_list_id => todo_list_id }
+        todo_item = BasecampAPI::TodoItem.find id, :params => { :todo_list_id => todo_list_id }
         copy_to(todo_item).save
       end
 

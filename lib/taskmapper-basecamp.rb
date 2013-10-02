@@ -23,6 +23,7 @@ class Hash
   end
 end
 
+require 'provider/api'
 require 'provider/basecamp'
 require 'provider/project'
 require 'provider/ticket'

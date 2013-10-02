@@ -8,7 +8,7 @@ module TaskMapper::Provider
     # created_at => created_on
     # updated_at => last_changed_on
     class Project < TaskMapper::Provider::Base::Project
-      API = ::Basecamp::Project
+      API = BasecampAPI::Project
 
       def initialize(*backend_info)
         @system_data ||= {}
