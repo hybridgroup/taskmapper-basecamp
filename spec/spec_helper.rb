@@ -51,6 +51,8 @@ RSpec.configure do |c|
     stub_get "#{base_uri}/projects.xml", "projects.xml"
     stub_get "#{base_uri}/projects/5220065.xml", "projects/5220065.xml"
     stub_get "#{base_uri}/projects/5220065/todo_lists.xml?responsible_party=", 'todo_list_with_items.xml'
+    stub_get "#{base_uri}/todo_items/133184178.xml", 'todo_item.xml'
+    stub_put "#{base_uri}/todo_items/133184178.xml", 'todo_item.xml'
     stub_get "#{base_uri}/todo_items/133184178/comments.xml", 'comments.xml'
     stub_get "#{base_uri}/todo_items/133184178/comments/74197051.xml", 'comments/74197051.xml'
     stub_get "#{base_uri}/todo_items/133184178/comments/74197096.xml", 'comments/74197096.xml'

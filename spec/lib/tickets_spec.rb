@@ -47,11 +47,13 @@ describe TaskMapper::Provider::Basecamp::Project do
       end
     end
 
-    pending "#save" do
-      let(:ticket) { project.ticket 133184178 }
+    describe "#save" do
+      let(:ticket) { project.ticket ticket_id }
 
       it "should update the ticket" do
-        expect(ticket.save).to be_false
+        ticket.title = "New Ticket Title"
+        expect(ticket.save).to be_true
+        expect(ticket.title).to eq "New Ticket Title"
       end
     end
   end

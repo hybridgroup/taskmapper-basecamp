@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<todo-item>
+  <commented-at type='datetime'>
+    2012-05-01T18:50:16Z
+  </commented-at>
+  <comments-count type='integer'>
+    15
+  </comments-count>
+  <completed type='boolean'>
+    false
+  </completed>
+  <content>
+    updated again
+  </content>
+  <created-at type='datetime'>
+    2012-04-20T15:12:10Z
+  </created-at>
+  <creator-id type='integer'>
+    6212251
+  </creator-id>
+  <due-at nil='true'/>
+  <id type='integer'>
+    133184178
+  </id>
+  <position type='integer'>
+    1
+  </position>
+  <todo-list-id type='integer'>
+    19700819
+  </todo-list-id>
+  <updated-at type='datetime'>
+    2012-05-01T18:50:16Z
+  </updated-at>
+  <created-on type='datetime' deprecated='true'>
+    2012-04-20T15:12:10Z
+  </created-on>
+  <creator-name>
+    Clutch Test
+  </creator-name>
+</todo-item>

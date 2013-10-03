@@ -7,8 +7,18 @@ module TaskMapper::Provider
       # ticket - a hash of Ticket attributes
       #
       # Returns a new Ticket instance
-      def initialize(ticket)
+      def initialize(*ticket)
+        ticket = ticket.first if ticket.is_a?(Array)
         super ticket
+      end
+
+      # Public: Saves a Ticket to Basecamp
+      #
+      # Returns a boolean indicating if the ticket was saved or not
+      def save
+        todo = BasecampAPI::TodoItem.find(self[:id])
+        attrs = self.class.send(:convert_hash_from_ticket_to_todo, self)
+        todo.update_attributes(attrs)
       end
 
       class << self
