@@ -1,10 +1,11 @@
 # taskmapper-basecamp
 
-This is the provider for interaction with [basecamp](http://www.basecamphq.com) using [taskmapper](http://ticketrb.com)
+This is the [TaskMapper][] adapter for interaction with [Basecamp Classic][]
 
-# Basecamp Setup
+## Setup
 
-Basecamp's API access is disabled by default on their accounts. You will have to go to the account page and enable it.
+By default, API access is disabled on Basecamp accounts. You will have to  go
+into the account page to enable it:
 
 1. From the dashboard, click the "Account (Upgrade/Invoices)" tab in the right hand side.
 2. Scroll down to the Basecamp API section. (It should be near the bottom, second-to-last.)
@@ -12,52 +13,120 @@ Basecamp's API access is disabled by default on their accounts. You will have to
 
 ## Token
 
-It is recommended that you use the authentication token instead of a username and password to authenticate with basecamp. The token can be found from the "My Info" link at the top right hand corner next to the "Sign out" link.
+While you can use the adapter with your Basecamp username and password, it is
+recommended that you use an authentication token instead. You can find your
+token on the "My Info" page (at the top right corner of Basecamp, next to the
+"Sign out" link).
 
-At the bottom of that page is the "Authentication tokens" section. Click on the "Show your tokens" link for your API token. It's the first one.
+At the bottom of that page is the "Authentication tokens" section. Click on the
+"Show your tokens" link for your API token. It's the first one.
 
-# Usage
+## Usage
 
-Initialize the basecamp taskmapper instance using a token or username and password:
+Initialize the taskmapper-basecamp instance using your domain and either
+a username/password or authentication token:
 
-    basecamp = taskmapper.new(:basecamp, :domain => 'yourdomain.basecamphq.com', :token => 'abc000...')
-    basecamp = taskmapper.new(:basecamp, :domain => 'yourdomain.basecamphq.com', :username => 'you', :password => 'pass')
+```ruby
+basecamp = TaskMapper.new(
+  :basecamp,
+  :domain => "YOURDOMAIN.basecamphq.com",
+  :token => "YOUR_TOKEN"
+)
 
-## Find projects
+basecamp = TaskMapper.new(
+  :basecamp,
+  :domain => "YOURDOMAIN.basecamphq.com",
+  :username => "YOUR_USERNAME",
+  :password => "YOUR_PASSWORD"
+)
+```
 
-    projects = basecamp.projects
-    project = basecamp.project(id)
+## Finding Projects
 
-## Find tickets
+You can find your own projects by using:
 
-Since basecamp does not have the conventional "tickets", taskmapper-basecamp considers a TodoItem as a ticket, but will prepend the TodoList's title to the TodoItem's title.
-    tickets = project.tickets
-    ticket = project.ticket(<todoitem_id>)
+```ruby
+projects = basecamp.projects # will return all projects
+projects = basecamp.projects ["project_id", "another_project_id"]
+project = basecamp.projects.find :first, "project_id"
+projects = basecamp.projects.find :all, ["project_id", "another_project_id"]
+```
 
-## Find comments
+## Finding Tickets
 
-   comments = ticket.comments
+```ruby
+tickets = project.tickets # All open tickets
+tickets = project.tickets :all, :status => 'closed' # all closed tickets
+ticket = project.ticket 981234
+```
 
-## More
+## Opening A Ticket
 
-For more usage information, see [taskmapper](http://github.com/hybridgroup/taskmapper). This provider should implement all the taskmapper functionality. If it does not, please notify us.
+```ruby
+ticket = project.ticket!(
+  :title => "Content of the new ticket."
+)
+```
 
-## Contributions
+## Closing Tickets
+
+```ruby
+ticket.close
+```
+
+## Reopening Tickets
+
+```ruby
+ticket.reopen
+```
+
+## Updating Tickets
+
+```ruby
+ticket.title = "New title"
+ticket.save
+```
+
+## Finding Comments
+
+```ruby
+ticket.comments # all comments for a ticket
+ticket.comments 90210
+```
+
+## Creating a Comment
+
+```ruby
+ticket.comment! :body => "New Comment!"
+```
+
+## Dependencies
+
+- rubygems
+- [taskmapper][]
+- [basecamp][]
+
+## Contributors
 
 * [Kir Shatrov](https://github.com/kirs) ([Evrone company](https://github.com/organizations/evrone))
 
-Thanks for using taskmapper!
+## Contributing
 
-### Note on Patches/Pull Requests
- 
-* Fork the project.
-* Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
-  future version unintentionally.
-* Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
-* Send me a pull request. Bonus points for topic branches.
+The main way you can contribute is with some code! Here's how:
 
-## Copyright
+- Fork `taskmapper-basecamp`
+- Create a topic branch: git checkout -b my_awesome_feature
+- Push to your branch - git push origin my_awesome_feature
+- Create a Pull Request from your branch
+- That's it!
 
-Copyright (c) 2010 HybridGroup. See LICENSE for details.
+We use RSpec for testing. Please include tests with your pull request. A simple
+`bundle exec rake` will run the suite. Also, please try to TomDoc your methods,
+it makes it easier to see what the code does and makes it easier for future
+contributors to get started.
+
+(c) 2013 The Hybrid Group
+
+[taskmapper]: http://ticketrb.com
+[basecamp classic]: https://basecamp.com/classic
+[basecamp]: https://github.com/anibalcucco/basecamp-wrapper
