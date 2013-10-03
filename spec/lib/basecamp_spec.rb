@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe TaskMapper::Basecamp do
+describe TaskMapper::Provider::Basecamp do
   let(:tm) { create_instance }
 
   describe "#new" do
