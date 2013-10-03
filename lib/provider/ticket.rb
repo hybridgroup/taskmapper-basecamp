@@ -1,165 +1,144 @@
 module TaskMapper::Provider
   module Basecamp
-    # Ticket class for taskmapper-basecamp
-    #
-    #
-    # * status => completed (either completed or incomplete)
-    # * priority => position
-    # * title => TodoList#name - TodoItem#content (up to 100 characters)
-    # * resolution => completed (either completed or '')
-    # * updated_at => completed_on
-    # * description => content
-    # * assignee => responsible_party_name (read-only)
-    # * requestor => creator_name (read-only)
-    # * project_id
     class Ticket < TaskMapper::Provider::Base::Ticket
-      def initialize(*options)
-        @system_data ||= {}
-        @cache ||= {}
-        first = options.first
-        case first
-        when Hash
-          super(first.to_hash)
-        else
-          @system_data[:client] = first
-          super(first.attributes)
-        end
+
+      # Public: Method to make a new Ticket.
+      #
+      # ticket - a hash of Ticket attributes
+      #
+      # Returns a new Ticket instance
+      def initialize(ticket)
+        super ticket
       end
 
       class << self
+        # Public: Creates a new Ticket based on a passed hash of attributes, and
+        # persists it to Basecamp
+        #
+        # attrs - hash of Ticket attributes to use when creating/persisting
+        #         the new Ticket
+        #
+        # Returns a Ticket instance
+        def create(attrs)
+          # Raise error if no title has been provided
+          attrs.fetch(:title) do
+            raise ArgumentError, "A title must be supplied to make a new Ticket"
+          end
 
-        def find_by_id(project_id, id)
-          find_by_attributes(project_id, {:id => id}).first
+          attrs[:todo_list_id] ||= BasecampAPI::TodoList.create(
+            :project_id => attrs[:project_id],
+            :name => "#{attrs[:title]} list"
+          ).id
+
+          todo_hash = convert_hash_from_ticket_to_todo attrs
+
+          todo = BasecampAPI::TodoItem.new(todo_hash)
+          todo.save
+
+          todo_attrs = convert_hash_from_todo_to_ticket todo.attributes
+          todo_attrs[:project_id] = attrs[:project_id]
+          todo_attrs[:todo_list_id] = attrs[:todo_list_id]
+
+          self.new todo_attrs
         end
 
+        # Public: Finds a particular Ticket by it's project_id and ticket_id
+        #
+        # project_id - ID of the project the ticket belongs to
+        # ticket_id - ID of the ticket to find
+        #
+        # Returns a Ticket instance
+        def find_by_id(project_id, ticket_id)
+          find_by_attributes(project_id, { :id => ticket_id }).first
+        end
+
+        # Public: Searches all tickets for a project with a hash of attributes
+        #
+        # project_id - ID of the project who's tickets should be searched
+        # attributes - hash of attributes to search with
+        #
+        # Returns an array of Tickets
+        # Examples:
+        #
+        #  find_by_attributes 1234567890, { :id => 2 }
+        #  #=> [<Ticket id:1 project_id:1234567890>]
         def find_by_attributes(project_id, attributes = {})
-          search(project_id, attributes)
+          search_by_attribute find_all(project_id), attributes
         end
 
-        def search(project_id, options = {}, limit = 1000)
-          tickets = todo_items(project_id).map {|ti| self.new ti.attributes.merge :project_id => project_id }
-          search_by_attribute(tickets, options, limit)
-        end
-
-        # It expects a single hash
-        def create(attributes_hash)
-          todo_item_hash = create_todo_item_hash attributes_hash
-          todo_item = create_todo_item todo_item_hash
-
-          return nil unless todo_item.save
-
-          todo_item.project_id = attributes_hash[:project_id]
-          todo_item.todo_list_id = todo_item_hash[:todo_list_id]
-          self.new(todo_item)
+        # Public: Finds all Tickets belonging to a project
+        #
+        # project_id - ID of the project to fetch tickets for
+        #
+        # Returns an array of Tickets
+        def find_all(project_id)
+          lists = find_project_todo_lists project_id
+          todos = lists.collect { |list| extract_todos_from_todo_list list }
+          todos.flatten.uniq.collect do |todo|
+            todo[:project_id] = project_id
+            self.new todo
+          end.flatten
         end
 
         private
-        def project_todo_lists(project_id)
-          BasecampAPI::TodoList.find(:all, :params => {:project_id => project_id, :responsible_party => ''})
+        # Private: Finds all TodoLists in Basecamp belonging to a project
+        #
+        # project_id - the project to find TodoLists for
+        #
+        # Returns an array of Basecamp::TodoLists
+        def find_project_todo_lists(project_id)
+          BasecampAPI::TodoList.find(
+            :all,
+            :params => {
+              :project_id => project_id,
+              :responsible_party => ''
+            }
+          )
         end
 
-        def todo_items(project_id)
-          project_todo_lists(project_id).map { |l| l.todo_items }.flatten
+        # Private: Extracts Todo objects from a TodoList and converts them into
+        # Tickets
+        #
+        # todo_list - a BaseCamp::TodoList to extract tickets from
+        #
+        # Returns an array of Hashes containing Todo data
+        def extract_todos_from_todo_list(todo_list)
+          todos = todo_list.todo_items.collect { |t| t.todo_items }.flatten
+          todos.collect do |todo|
+            attrs = todo.attributes
+            attrs.merge! :todo_list_id => todo_list.id
+            convert_hash_from_todo_to_ticket attrs
+          end
         end
 
-        def create_todo_item_hash(ticket_hash)
-          a = ticket_hash
-          validate_ticket_hash a
-          todo_item_hash = {
-            :content => a[:title],
-            :position => a[:priority] || 1,
-            :todo_list_id => a[:todo_list_id] || create_todo_list({
-            :project_id => a[:project_id],
-            :name => "#{a[:title]} list"}).id
-          }
+        # Private: Converts a hash's attributes from a Basecamp Todo into the
+        # standard TaskMapper Ticket interface
+        #
+        # hash - hash of Todo attributes to make into a Ticket
+        #
+        # Returns a Hash ready to be turned into a Ticket
+        def convert_hash_from_todo_to_ticket(hash)
+          hash = hash.dup
+          hash[:creator_name].strip!.lstrip! if hash[:creator_name]
+          hash[:title] = hash.delete(:content).strip.lstrip
+          hash[:priority] = hash.delete(:position)
+          hash[:status] = hash.delete(:completed) ? "completed" : "incomplete"
+          hash[:created_at] = hash.delete(:created_on)
+          hash
         end
 
-        def create_todo_item(attributes_hash)
-          BasecampAPI::TodoItem.new(attributes_hash)
+        # Private: Converts a hash's attributes from a TaskMapper Ticket into
+        # a format that can be persisted to a Basecamp Todo.
+        #
+        # hash - hash of Ticket attributes to turn into a Todo
+        #
+        # Returns a hash ready to be turned into a Todo
+        def convert_hash_from_ticket_to_todo(hash)
+          hash = hash.dup
+          hash[:content] = hash.delete(:title)
+          hash[:position] = hash.delete(:priority) || 1
+          hash
         end
-
-        def validate_ticket_hash(attributes_hash)
-          title = attributes_hash[:title]
-          raise ArgumentError.new "Title is required" if title.nil? or title.empty?
-        end
-
-        def create_todo_list(attributes)
-          BasecampAPI::TodoList.create(attributes)
-        end
-      end
-
-      def copy_to(todo_item)
-        todo_item.completed = status
-        todo_item.position = priority
-        todo_item.name = title
-        todo_item.content = title
-        todo_item.completed = resolution
-        todo_item.responsible_party_name = assignee
-        todo_item.creator_name = requestor
-        todo_item
-      end
-
-      def save
-        todo_item = BasecampAPI::TodoItem.find id, :params => { :todo_list_id => todo_list_id }
-        copy_to(todo_item).save
-      end
-
-      def todo_list_id
-        self['todo_list_id'].to_i
-      end
-
-      def status
-        self.completed ? 'completed' : 'incomplete'
-      end
-
-      def priority
-        self.position
-      end
-
-      def resolution
-        self.completed ? self.completed : 'In Progress'
-      end
-
-      def priority=(pri)
-        self.position = pri
-      end
-
-      def title
-        self.content
-      end
-
-      def title=(titl)
-        self.content = titl
-      end
-
-      def updated_at=(comp)
-        self.completed_on = comp
-      end
-
-      def updated_at
-        self.completed_on.to_time
-      rescue NoMethodError
-        Time.now
-      end
-
-      def description
-        self.content
-      end
-
-      def description=(desc)
-        self.content = desc
-      end
-
-      def assignee
-        self.responsible_party_name ? self.responsible_party_name : 'Unassigned'
-      end
-
-      def requestor
-        self.creator_name
-      end
-
-      def comment!(attributes)
-        Comment.create id, attributes
       end
     end
   end

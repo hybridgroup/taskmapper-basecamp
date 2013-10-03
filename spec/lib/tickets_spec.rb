@@ -3,7 +3,7 @@ require 'spec_helper'
 describe TaskMapper::Provider::Basecamp::Project do
   let(:tm) { create_instance }
   let(:project) { tm.project(5220065) }
-  let(:ticket_id) { 19700819 }
+  let(:ticket_id) { 133184178 }
   let(:ticket_class) { TaskMapper::Provider::Basecamp::Ticket }
 
   describe "#tickets" do
