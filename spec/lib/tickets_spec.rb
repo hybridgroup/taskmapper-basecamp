@@ -76,15 +76,15 @@ describe TaskMapper::Provider::Basecamp::Project do
       end
     end
 
-    pending "without a todo_list_id" do
+    context "without a todo_list_id" do
       let(:ticket) do
         project.ticket!(:title => 'Ticket #12', :description => 'Body')
       end
 
       it "creates a new ticket" do
         expect(ticket).to be_a ticket_class
-        expect(ticket.project_id).to_not be_nil
-        expect(ticket.todo_list_id).to eq 9972756
+        expect(ticket.project_id).to eq project.id
+        expect(ticket.todo_list_id).to_not be_nil
         expect(ticket.title).to eq "Ticket #12"
       end
     end

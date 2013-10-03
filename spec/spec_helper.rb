@@ -60,7 +60,8 @@ RSpec.configure do |c|
     stub_get "#{base_uri}/todo_lists/19700382/todo_items.xml", 'todo_list_with_items.xml'
     stub_get "#{base_uri}/todo_lists/19700819/todo_items.xml", 'todo_list_with_items.xml'
     stub_post "#{base_uri}/projects.xml", ''
-    stub_post "#{base_uri}/projects/5220065/todo_lists.xml", ''
+    stub_post "#{base_uri}/projects/5220065/todo_lists.xml", 'todo_lists/create.xml'
     stub_post "#{base_uri}/todo_lists/9972756/todo_items.xml", ''
+    stub_post "#{base_uri}/todo_lists/62504112/todo_items.xml", 'todo_items/62504112_todo_item.xml'
   end
 end
