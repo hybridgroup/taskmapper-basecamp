@@ -21,6 +21,15 @@ module TaskMapper::Provider
         todo.update_attributes(attrs)
       end
 
+      # Public: Creates a new comment based on passed attributes.
+      #
+      # attributes - hash of attributes to be used when creating new comment
+      #
+      # Returns a Comment instance
+      def comment!(attributes)
+        Comment.create id, attributes
+      end
+
       class << self
         # Public: Creates a new Ticket based on a passed hash of attributes, and
         # persists it to Basecamp

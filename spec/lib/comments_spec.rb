@@ -51,13 +51,13 @@ describe TaskMapper::Provider::Basecamp::Ticket do
     end
   end
 
-  pending "#comment!" do
+  describe "#comment!" do
     context "with a comment body" do
       let(:comment) { ticket.comment! :body => "New Comment" }
 
       it "creates a new comment" do
         expect(comment).to be_a comment_class
-        epxect(comment.body).to eq "New Comment"
+        expect(comment.body).to eq "New Comment"
       end
     end
   end
