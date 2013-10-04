@@ -1,62 +1,85 @@
 module TaskMapper::Provider
   module Basecamp
-    # The comment class for taskmapper-basecamp
-    #
-    # Do any mapping between taskmapper and your system's comment model here
-    # versions of the ticket.
-    #
     class Comment < TaskMapper::Provider::Base::Comment
-      # declare needed overloaded methods here
       API = BasecampAPI::Comment
 
-      def initialize(*object)
-        if object.first
-          object = object.first
-          unless object.is_a? Hash
-            hash = {:id => object.id,
-              :body => object.body,
-              :author => object.author_name,
-              :created_at => object.created_at,
-              :project_id => object.project_id,
-              :ticket_id => object.ticket_id}
-          else
-            hash = object
-          end
-          super hash
-        end
+      # Public: Method to create a new Comment
+      #
+      # comment - a hash of Comment attributes
+      #
+      # Returns a new Comment instance
+      def initialize(*comment)
+        comment = comment.first if comment.is_a?(Array)
+        super comment
       end
 
-      def self.find_by_id(project_id, ticket_id, id)
-        basecamp_comment = self::API.find(id, :params => {:todo_item_id => ticket_id})
-        self.new basecamp_comment.attributes.merge!(:project_id => project_id, :ticket_id => ticket_id)
-      end
-
-      def self.find_by_attributes(project_id, ticket_id, attributes = {})
-        self.search(project_id, ticket_id, attributes)
-      end
-
-      def self.search(project_id, ticket_id, options = {}, limit = 1000)
-        comments = API.find(:all, :params => {:todo_item_id => ticket_id}).collect {|c| self.new(c.attributes.merge!(:project_id => project_id, :ticket_id => ticket_id)) }
-        search_by_attribute(comments, options, limit)
-      end
-
-      def self.create(ticket_id, attributes)
-        new_comment = API.new attributes.merge(:todo_item_id => ticket_id)
-        new_comment.save
-
-        reloaded_comment = find_bc_comment(ticket_id, new_comment.id)
-        self.new reloaded_comment.attributes.merge!(:ticket_id => ticket_id)
-      end
-
+      # Public: Saves a Comment to Basecamp
+      #
+      # Returns a boolean indicating if the comment was saved or not
       def save
-        bc_comment = self.class.find_bc_comment ticket_id, id
-        bc_comment.body = self.body
-        bc_comment.save
+        comment = API.find(self[:id])
+        comment.update_attributes(self.to_hash)
       end
 
-      private
-      def self.find_bc_comment(ticket_id, id)
-        API.find id, :params => { :todo_item_id => ticket_id }
+      class << self
+        # Public: Finds a specific Comment by it's project_id, ticket_id, and
+        # comment_id
+        #
+        # project_id - ID of the project the comment belongs to
+        # ticket_id - ID of the comment to find
+        # comment_id - ID of the comment to find
+        #
+        # Returns a matching Comment instance
+        def find_by_id(project_id, ticket_id, comment_id)
+          find_by_attributes(project_id, ticket_id, { :id => comment_id }).first
+        end
+
+        # Public: Searches all Comments belonging to a ticket with a hash of
+        # attributes
+        #
+        # project_id - ID of project the ticket belongs to
+        # ticket_id - ID of the ticket whose comments should be searched
+        # attributes - hash of attributes to search with
+        #
+        # Returns a Comment instance
+        def find_by_attributes(project_id, ticket_id, attributes = {})
+          search_by_attribute find_all(project_id, ticket_id), attributes
+        end
+
+        # Public: Finds all Comments associated with a Project/Ticket
+        #
+        # project_id - ID of the project the ticket belongs to
+        # ticket_id - ID of the ticket to fetch comments for
+        #
+        # Returns an array of Comments
+        def find_all(project_id, ticket_id)
+          comments = API.find :all, :params => { :todo_item_id => ticket_id }
+          comments.collect do |comment|
+            attrs = comment.attributes
+            attrs.merge!({ :project_id => project_id, :ticket_id => ticket_id })
+            attrs[:author] = attrs.delete(:author_name)
+            self.new attrs
+          end.flatten
+        end
+
+        # Public: Creates a new Comment based on passed attributes, and persists
+        # it to Basecamp
+        #
+        # attrs - hash of attributes used when creating/persisting the new
+        #         Comment
+        #
+        # Returns a new Comment instance
+        def create(attrs = {})
+          attrs.fetch(:body) do
+            raise ArgumentError, "A body must be supplied to make a new Comment"
+          end
+
+          attrs[:todo_item_id] = attrs.fetch(:ticket_id)
+
+          comment = API.new(attrs)
+          comment.save
+          find_by_id attrs[:project_id], attrs[:ticket_id], comment.id
+        end
       end
     end
   end

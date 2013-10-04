@@ -44,4 +44,15 @@
     <id type="integer">74197096</id>
     <author-name>Kia Kroas</author-name>
   </comment>
-</comments>
+  <comment>
+    <attachments-count type="integer">0</attachments-count>
+    <author-id type="integer">5654019</author-id>
+    <body>New Comment</body>
+    <commentable-id type="integer">62509330</commentable-id>
+    <commentable-type>TodoItem</commentable-type>
+    <created-at type="datetime">2010-07-23T23:13:39Z</created-at>
+    <emailed-from nil="true"></emailed-from>
+    <id type="integer">74197053</id>
+    <author-name>Kia Kroas</author-name>
+  </comment>
+  </comments>
