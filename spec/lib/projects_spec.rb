@@ -5,6 +5,14 @@ describe TaskMapper::Provider::Basecamp::Project do
   let(:project_id) { 5220065 }
   let(:project_class) { TaskMapper::Provider::Basecamp::Project }
 
+  before do
+    ActiveResource::HttpMock.respond_to do |mock|
+      mock.get '/projects.xml', headers, fixture_for('projects'), 200
+      mock.get '/projects/5220065.xml', headers, fixture_for('projects/5220065'), 200
+      mock.post '/projects.xml', pheaders, '', 200
+    end
+  end
+
   describe "#projects" do
     context "with no arguments" do
       let(:projects) { tm.projects }

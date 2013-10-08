@@ -9,6 +9,20 @@ describe TaskMapper::Provider::Basecamp::Ticket do
   let(:ticket) { project.ticket ticket_id }
   let(:comment_class) { TaskMapper::Provider::Basecamp::Comment }
 
+  before do
+    ActiveResource::HttpMock.respond_to do |mock|
+      mock.get "/projects/#{project_id}.xml", rheaders, fixture_for('projects/5220065'), 200
+      mock.get "/projects/#{project_id}/todo_lists.xml?responsible_party=", rheaders, fixture_for('todo_list_with_items'), 200
+      mock.get "/todo_items/#{ticket_id}/comments.xml", rheaders, fixture_for('comments'), 200
+      mock.get "/todo_items/#{ticket_id}/comments/74197051.xml", rheaders, fixture_for('comments/74197051'), 200
+      mock.get "/todo_items/#{ticket_id}/comments/74197096.xml", rheaders, fixture_for('comments/74197051'), 200
+      mock.get "/todo_lists/19700377/todo_items.xml", rheaders, fixture_for('todo_list_with_items'), 200
+      mock.get "/todo_lists/19700382/todo_items.xml", rheaders, fixture_for('todo_list_with_items'), 200
+      mock.get "/todo_lists/19700819/todo_items.xml", rheaders, fixture_for('todo_list_with_items'), 200
+      mock.post "/todo_items/133184178/comments.xml", pheaders, fixture_for('comments/new_comment'), 200
+    end
+  end
+
   describe "#comments" do
     context "without arguments" do
       let(:comments) { ticket.comments }

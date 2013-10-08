@@ -3,6 +3,12 @@ require 'spec_helper'
 describe TaskMapper::Provider::Basecamp do
   let(:tm) { create_instance }
 
+  before do
+    ActiveResource::HttpMock.respond_to do |mock|
+      mock.get "/people/me.xml", rheaders, fixture_for('project_count'), 200
+    end
+  end
+
   describe "#new" do
     it "creates a new TaskMapper instance" do
       expect(tm).to be_a TaskMapper
