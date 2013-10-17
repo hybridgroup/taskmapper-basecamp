@@ -2,23 +2,72 @@ module TaskMapper::Provider
   module Basecamp
     class Ticket < TaskMapper::Provider::Base::Ticket
 
-      # Public: Method to make a new Ticket.
-      #
-      # ticket - a hash of Ticket attributes
-      #
-      # Returns a new Ticket instance
-      def initialize(*ticket)
-        ticket = ticket.first if ticket.is_a?(Array)
-        super ticket
-      end
-
       # Public: Saves a Ticket to Basecamp
       #
       # Returns a boolean indicating if the ticket was saved or not
       def save
         todo = BasecampAPI::TodoItem.find(self[:id])
-        attrs = self.class.send(:convert_hash_from_ticket_to_todo, self)
-        todo.update_attributes(attrs)
+        todo.update_attributes(self)
+      end
+
+      def assignee
+        self[:creator_name].strip.lstrip
+      end
+
+      def requestor
+        self.assignee
+      end
+
+      def title
+        self[:content].strip.lstrip
+      end
+
+      def title=(string)
+        self[:content] = string
+      end
+
+      def description
+        self.title
+      end
+
+      def description=(string)
+        self[:content] = string
+      end
+
+      def priority
+        self[:position]
+      end
+
+      def priority=(pos)
+        self[:position] = pos
+      end
+
+      def status
+        self[:completed] ? "completed" : "incomplete"
+      end
+
+      def status=(string)
+        self[:completed] = string
+      end
+
+      def resolution
+        self.status
+      end
+
+      def resolution=(string)
+        self[:completed] = string
+      end
+
+      def created_at
+        Time.parse(self[:created_on])
+      rescue
+        self[:created_on]
+      end
+
+      def updated_at
+        Time.parse(self[:updated_at])
+      rescue
+        self[:updated_at]
       end
 
       class << self
@@ -40,14 +89,14 @@ module TaskMapper::Provider
             :name => "#{attrs[:title]} list"
           ).id
 
-          todo_hash = convert_hash_from_ticket_to_todo attrs
+          todo = BasecampAPI::TodoItem.new(attrs)
 
-          todo = BasecampAPI::TodoItem.new(todo_hash)
-          todo.save
+          return nil unless todo.save
 
-          todo_attrs = convert_hash_from_todo_to_ticket todo.attributes
-          todo_attrs[:project_id] = attrs[:project_id]
-          todo_attrs[:todo_list_id] = attrs[:todo_list_id]
+          todo_attrs = todo.attributes.merge(
+            :project_id => attrs[:project_id],
+            :todo_list_id => attrs[:todo_list_id]
+          )
 
           self.new todo_attrs
         end
@@ -59,7 +108,7 @@ module TaskMapper::Provider
         #
         # Returns a Ticket instance
         def find_by_id(project_id, ticket_id)
-          find_by_attributes(project_id, { :id => ticket_id }).first
+          find_by_attributes(project_id, :id => ticket_id).first
         end
 
         # Public: Searches all tickets for a project with a hash of attributes
@@ -117,41 +166,7 @@ module TaskMapper::Provider
           todos.collect do |todo|
             attrs = todo.attributes
             attrs.merge! :todo_list_id => todo_list.id
-            convert_hash_from_todo_to_ticket attrs
           end
-        end
-
-        # Private: Converts a hash's attributes from a Basecamp Todo into the
-        # standard TaskMapper Ticket interface
-        #
-        # hash - hash of Todo attributes to make into a Ticket
-        #
-        # Returns a Hash ready to be turned into a Ticket
-        def convert_hash_from_todo_to_ticket(hash)
-          hash = hash.dup
-          hash[:creator_name].strip!.lstrip! if hash[:creator_name]
-          hash[:assignee] = hash[:creator_name]
-          hash[:requestor] = hash[:creator_name]
-          hash[:title] = hash.delete(:content).strip.lstrip
-          hash[:description] = hash[:title]
-          hash[:priority] = hash.delete(:position)
-          hash[:status] = hash.delete(:completed) ? "completed" : "incomplete"
-          hash[:resolution] = hash[:status]
-          hash[:created_at] = hash.delete(:created_on)
-          hash
-        end
-
-        # Private: Converts a hash's attributes from a TaskMapper Ticket into
-        # a format that can be persisted to a Basecamp Todo.
-        #
-        # hash - hash of Ticket attributes to turn into a Todo
-        #
-        # Returns a hash ready to be turned into a Todo
-        def convert_hash_from_ticket_to_todo(hash)
-          hash = hash.dup
-          hash[:content] = hash.delete(:title)
-          hash[:position] = hash.delete(:priority) || 1
-          hash
         end
       end
     end

@@ -18,7 +18,7 @@ module TaskMapper::Provider
       # Returns a boolean indicating if the comment was saved or not
       def save
         comment = API.find(self[:id])
-        comment.update_attributes(self.to_hash)
+        comment.update_attributes self
       end
 
       class << self
@@ -31,7 +31,7 @@ module TaskMapper::Provider
         #
         # Returns a matching Comment instance
         def find_by_id(project_id, ticket_id, comment_id)
-          find_by_attributes(project_id, ticket_id, { :id => comment_id }).first
+          find_by_attributes(project_id, ticket_id, :id => comment_id).first
         end
 
         # Public: Searches all Comments belonging to a ticket with a hash of
@@ -56,7 +56,7 @@ module TaskMapper::Provider
           comments = API.find :all, :params => { :todo_item_id => ticket_id }
           comments.collect do |comment|
             attrs = comment.attributes
-            attrs.merge!({ :project_id => project_id, :ticket_id => ticket_id })
+            attrs.merge! :project_id => project_id, :ticket_id => ticket_id
             attrs[:author] = attrs.delete(:author_name)
             self.new attrs
           end.flatten

@@ -10,13 +10,6 @@ module TaskMapper::Provider
     class Project < TaskMapper::Provider::Base::Project
       API = BasecampAPI::Project
 
-      def initialize(*data)
-        @system_data ||= {}
-        data = data.first if data.is_a? Array
-        @system_data[:client] = data
-        super data.attributes
-      end
-
       def description
         announcement
       end
@@ -47,12 +40,11 @@ module TaskMapper::Provider
         end
 
         def find_by_attributes(attributes = {})
-          search(attributes)
+          search_by_attribute(find_all, attributes)
         end
 
-        def search(options = {}, limit = 1000)
-          projects = API.find(:all).collect { |project| self.new project }
-          search_by_attribute(projects, options, limit)
+        def find_all
+          API.find(:all).collect { |project| self.new project }
         end
       end
 
@@ -69,6 +61,7 @@ module TaskMapper::Provider
             sleep 1
           end
         end
+        self
       end
     end
   end

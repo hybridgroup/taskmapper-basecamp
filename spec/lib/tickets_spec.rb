@@ -17,7 +17,7 @@ describe TaskMapper::Provider::Basecamp::Project do
       mock.get "/todo_lists/19700819/todo_items.xml", rheaders, fixture_for('todo_list_with_items'), 200
       mock.post "/todo_lists/62504112/todo_items.xml", pheaders, fixture_for('todo_items/62504112_todo_item'), 200
       mock.post '/projects/5220065/todo_lists.xml', pheaders, fixture_for('todo_lists/create'), 200
-      mock.post '/todo_lists/9972756/todo_items.xml', pheaders, '', 200
+      mock.post '/todo_lists/9972756/todo_items.xml', pheaders, fixture_for('todo_items/62504112_todo_item'), 200
       mock.put "/todo_items/#{ticket_id}.xml", pheaders, fixture_for('todo_item'), 200
     end
   end
