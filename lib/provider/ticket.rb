@@ -130,9 +130,13 @@ module TaskMapper::Provider
         def convert_hash_from_todo_to_ticket(hash)
           hash = hash.dup
           hash[:creator_name].strip!.lstrip! if hash[:creator_name]
+          hash[:assignee] = hash[:creator_name]
+          hash[:requestor] = hash[:creator_name]
           hash[:title] = hash.delete(:content).strip.lstrip
+          hash[:description] = hash[:title]
           hash[:priority] = hash.delete(:position)
           hash[:status] = hash.delete(:completed) ? "completed" : "incomplete"
+          hash[:resolution] = hash[:status]
           hash[:created_at] = hash.delete(:created_on)
           hash
         end

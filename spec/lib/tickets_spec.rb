@@ -105,4 +105,20 @@ describe TaskMapper::Provider::Basecamp::Project do
       end
     end
   end
+
+  describe "fields" do
+    let(:ticket) { project.ticket ticket_id }
+    it "should match the contract" do
+      expect(ticket.title).to_not be_nil
+      expect(ticket.description).to_not be_nil
+      expect(ticket.status).to_not be_nil
+      expect(ticket.priority).to_not be_nil
+      expect(ticket.resolution).to_not be_nil
+      expect(ticket.created_at).to_not be_nil
+      expect(ticket.updated_at).to_not be_nil
+      expect(ticket.assignee).to_not be_nil
+      expect(ticket.requestor).to_not be_nil
+      expect(ticket.project_id).to_not be_nil
+    end
+  end
 end
